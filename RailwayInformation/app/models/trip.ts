@@ -5,6 +5,6 @@ export class Trip {
     constructor (
         public route: [RoutePoint],
         public trainNumber: String,
-        public Carriages: [Carriage]
+        public carriages: [Carriage]
     ) { }   
 }

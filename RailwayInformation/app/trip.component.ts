@@ -1,10 +1,11 @@
-﻿import { Component } from '@angular/core';
+﻿import { Component, Input, OnInit} from '@angular/core';
+import { Trip } from './models/trip';
 
 @Component({
-    selector: '.trip',
+    selector: '.trip-component',
     template: `        
         <td>
-            {{trainNumber}}
+            {{trip.trainNumber}}
             {{route[0].station}} &#8212; {{route[route.length-1].station}}
         </td>
         <td>
@@ -41,63 +42,38 @@
     `]
 })
 export class TripComponent {
-    route = [{
-        arrive: +new Date('03 27 2017 23:00'),
-        stayTime: 5,
-        tripTime: 0,
-        station: "Москва"
-    }, {
-            arrive: +new Date('04 27 2017 00:01'),
-            stayTime: 10,
-            tripTime: 305,
-            station: "Минск"
-        }, {
-            arrive: +new Date('03 27 2017 03:28'),
-            stayTime: 10,
-            station: "Брест",
-            tripTime: 512
-    }];
-    Carriages = [{
-        name: "1",
-        seats: [],
-        emptySeat: 15,
-        type: "Купе",
-        price: "4 руб"
-    }, {
-            name: "2",
-            seats: [],
-            emptySeat: 30,
-            type: "Купе",
-            price: "4 руб"
-        }, {
-            name: "3",
-            seats: [],
-            emptySeat: 15,
-            type: "Плацкартный",
-            price: "18.50 руб"
-    }, {
-            name: "4",
-            price: "20 руб",
-            seats: [],
-            emptySeat: 20,
-            type: "СВ"
-    }];
-    trainNumber = "009ЯЩ"
-    tripTime = this.calculateTripTime();
-    carriages = this.getSeats();
-    calculateTripTime() {
-        let tripTime = this.route[2].tripTime - this.route[1].tripTime;
-        return `${parseInt((String)(tripTime / 60))} ч ${tripTime % 60} мин`
+    @Input() trip: any;
+
+    route: any;
+    Carriages: any;
+    trainNumber: any;
+    tripTime: any;
+    carriages: any;
+
+    ngOnInit() {
+        if (this.trip) {
+            this.route = this.trip.route;
+            this.Carriages = this.trip.carriages;
+            this.trainNumber = this.trip.trainNumber;
+            this.tripTime = this.calculateTripTime();
+            this.carriages = this.getSeats();
+        }
+    
     }
 
+    
+    calculateTripTime() {
+        let tripTime: Date = new Date(+this.route[2].arrive - +this.route[1].arrive + this.route[1].stayTime * 60000);
+        return `${tripTime.getHours()} ч ${tripTime.getMinutes()} мин`
+    }
     getSeats() {
-        let res={};
+        let res = {};
         this.Carriages.forEach((item) => {
-            if (res[item.type])
-                res[item.type].seats += item.emptySeat;
+            if (res[<string>item.type])
+                res[<string>item.type].seats += item.emptySeat;
             else {
-                res[item.type] = {
-                    price: item.price,
+                res[<string>item.type] = {
+                    price: item.priceFactor + ' руб',
                     seats: item.emptySeat
                 }
             }

@@ -2,7 +2,7 @@
 
 export class RoutePoint {
     constructor (
-        public tripTime: number,
+        public tripDistance: number,
         public stayTime: number,
         public station: String,
         public arrive: Date

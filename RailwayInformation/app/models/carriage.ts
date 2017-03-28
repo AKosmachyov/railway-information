@@ -4,7 +4,7 @@
         public seats: [String],
         public emptySeat: number,
         public type: String,
-        public price: number
+        public priceFactor: number
     ) { }
     
 }

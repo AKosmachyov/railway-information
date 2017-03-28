@@ -43,82 +43,10 @@ import { Trip } from './models/trip';
                         </tr>
                     </thead>
                     <tbody>
-                        <tr class="trip"></tr>                        
-                    <!-- 2 -->
-                    <tr>
-                        <td>
-                            649Б
-                            Могилев &#8212; Брест
-                        </td>
-                        <td>
-                            06:13
-                            <p></p>
-                                Минск
-                            
-                        </td>
-                        <td>
-                            10:32
-                            <p></p>
-                            Брест
-                            
-                        <td>4 ч 19 мин</td>
-                        <td>
-                            <ul>
-                                <li>Купе</li>
-                                <li>Плацкартный</li>
-                            </ul>
-                        </td>
-                        <td>
-                            <ul>
-                                <li>7,72 руб</li>
-                                <li>19,91 руб.</li>
-                            </ul>
-                        </td>
-                        <td>
-                            <ul>
-                                <li>18</li>
-                                <li>20</li>
-                            </ul>
-                        </td>
-                    </tr>
-                    <!-- 3 -->
-                    <tr>
-                        <td>
-                            009ЯЩ
-                            Москва &#8212; Варшава
-                        </td>
-                        <td>
-                            00:01
-                            <p></p>
-                                Минск
-                        </td>
-                        <td>
-                            03:28
-                            <p></p>
-                                Брест
-                        <td>3 ч 27 мин</td>
-                        <td>
-                            <ul>
-                                <li>Купе</li>
-                                <li>Плацкартный</li>
-                            </ul>
-                        </td>
-                        <td>
-                            <ul>
-                                <li>8 руб</li>
-                                <li>19,91 руб.</li>
-                            </ul>
-                        </td>
-                        <td>
-                            <ul>
-                                <li>213</li>
-                                <li>4</li>
-                            </ul>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
+                        <tr class="trip-component" *ngFor="let item of items" [trip]="item"></tr>
+                    </tbody>
+                </table>
+            </div>
         </div>`,
         styles: [` 
             .top {
@@ -171,7 +99,9 @@ import { Trip } from './models/trip';
 })
 export class AppComponent implements OnInit{
     items: Trip[] = [];
-    constructor(private tripService: TripService) { }
+    constructor(private tripService: TripService) {
+        this.items = this.tripService.getData();
+    }
     
     ngOnInit(){
         this.items = this.tripService.getData();
