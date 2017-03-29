@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
 
@@ -8,7 +7,6 @@ namespace RailwayInformation.Models
 {
     public class Station
     {
-        [Key]
         public int Id { get; set; }
         public string prefix { get; set; }
         public string name { get; set; }
