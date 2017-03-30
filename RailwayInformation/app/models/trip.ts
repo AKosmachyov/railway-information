@@ -1,10 +1,12 @@
 ﻿import { RoutePoint } from "./routepoint";
-import { Carriage } from "./carriage";
+import { CarriageType } from "./carriageType";
 
 export class Trip {
-    constructor (
-        public route: [RoutePoint],
+    constructor(
+        public direction: String,
+        public from: RoutePoint,
+        public to: RoutePoint,
         public trainNumber: String,
-        public carriages: [Carriage]
-    ) { }   
+        public carriageType: [CarriageType]
+    ) { }
 }

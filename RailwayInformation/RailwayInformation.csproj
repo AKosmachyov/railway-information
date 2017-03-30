@@ -92,13 +92,18 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Controllers\StationController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\Carriage.cs" />
+    <Compile Include="Models\CarriageType.cs" />
     <Compile Include="Models\Route.cs" />
     <Compile Include="Models\RoutePoint.cs" />
     <Compile Include="Models\Station.cs" />
+    <Compile Include="Models\Storage.cs" />
+    <Compile Include="Models\Trip.cs" />
+    <Compile Include="Models\TripTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -116,7 +121,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Controllers\" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{4A0DDDB5-7A95-4FBF-97CC-616D07737A77}" />
@@ -126,12 +130,11 @@
     <TypeScriptCompile Include="app\app.module.ts" />
     <TypeScriptCompile Include="app\main.ts" />
     <TypeScriptCompile Include="app\models\carriage.ts" />
-    <TypeScriptCompile Include="app\service\trip.service.ts" />
-    <TypeScriptCompile Include="app\trip.component.ts" />
-    <TypeScriptCompile Include="app\models\route.ts" />
-    <TypeScriptCompile Include="app\models\routepoint.ts" />
-    <TypeScriptCompile Include="app\models\station.ts" />
+    <TypeScriptCompile Include="app\models\carriageType.ts" />
     <TypeScriptCompile Include="app\models\trip.ts" />
+    <TypeScriptCompile Include="app\service\http.service.ts" />
+    <TypeScriptCompile Include="app\trip.component.ts" />
+    <TypeScriptCompile Include="app\models\routepoint.ts" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

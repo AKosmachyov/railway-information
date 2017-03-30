@@ -1,6 +1,6 @@
 ﻿import { Component, OnInit } from '@angular/core';
-import { TripService } from './service/trip.service';
 import { Trip } from './models/trip';
+import { HttpService } from './service/http.service';
 
 @Component({
         selector: 'my-app',
@@ -17,13 +17,13 @@ import { Trip } from './models/trip';
                     <input type="text" id="to">
                     Когда
                     <input type="date">
-                    <button class="btn">
+                    <button class="btn" (click)="get()">
                         <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
                     </button>
                 </div>
                 <div class="col-md-2 navbar-right-panel">
-                    <a class="btn btn-default" href="#" role="button">Вход</a>
-                    <a class="btn btn-default" href="#" role="button">Регистрация</a>
+                    <a class="btn btn-default" role="button">Вход</a>
+                    <button class="btn btn-default" role="button">Регистрация</button>
                 </div>
             </div>
         </div>
@@ -97,14 +97,12 @@ import { Trip } from './models/trip';
             }
         `]
 })
-export class AppComponent implements OnInit{
+export class AppComponent {
     items: Trip[] = [];
-    constructor(private tripService: TripService) {
-        this.items = this.tripService.getData();
-    }
-    
-    ngOnInit(){
-        this.items = this.tripService.getData();
-        console.log(this.items);
+    constructor( private httpService: HttpService ) { };
+    get() {
+        this.httpService.getTrips().then((arr) => {            
+            this.items = arr;
+        })        
     }
 }
