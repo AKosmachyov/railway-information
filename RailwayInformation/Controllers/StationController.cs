@@ -1,5 +1,6 @@
 ﻿using RailwayInformation.Models;
 using System.Collections.Generic;
+using System.Web;
 using System.Web.Http;
 
 namespace RailwayInformation.Controllers
@@ -7,17 +8,10 @@ namespace RailwayInformation.Controllers
     public class StationController : ApiController
     {    
         // GET: api/Station
-        public List<TripTest> Get()
+        public List<TripTest> Get(string from, string to)
         {
-            return Storage.getTrip();
+            return Storage.getTrip(from, to);
         }
-
-        // GET: api/Station/5
-        public string Get(int id)
-        {
-            return "value";
-        }
-
         // POST: api/Station
         public void Post([FromBody]string value)
         {

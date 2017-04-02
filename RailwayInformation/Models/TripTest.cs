@@ -12,5 +12,12 @@ namespace RailwayInformation.Models
         public RoutePoint from;
         public RoutePoint to;
         public ICollection<CarriageType> carriageType;
+        public TripTest(string trainNumber, string fromDir, string toDir, RoutePoint from, RoutePoint to)
+        {
+            this.trainNumber = trainNumber;
+            this.direction = fromDir + ',' + toDir;
+            this.from = from;
+            this.to = to;
+        }
     }
 }

@@ -9,9 +9,9 @@ import 'rxjs/add/operator/toPromise';
 @Injectable()
 export class HttpService{
     constructor(private http: Http){ }
-    
-    getTrips(): Promise<[Trip]>{
-        return this.http.get('/api/station')
+
+    getTrips(from: string, to: string): Promise<[Trip]>{
+        return this.http.get(`/api/station?from=${encodeURIComponent(from)}&to=${encodeURIComponent(to)}`)
             .toPromise()
             .then(this.extractData)
             .catch(this.handleError);
