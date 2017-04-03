@@ -1,11 +1,11 @@
-﻿import { Component, OnInit } from '@angular/core';
+﻿import { Component } from '@angular/core';
+import {Router} from '@angular/router';
 import { Trip } from './models/trip';
 import { HttpService } from './service/http.service';
 
 @Component({
     selector: 'home',
-    template: `
-        <div class="main-part">
+    template: `     
             <div>
                     Откуда
                     <input type="text" id="from" [(ngModel)]="from">
@@ -32,11 +32,11 @@ import { HttpService } from './service/http.service';
                         </tr>
                     </thead>
                     <tbody>
-                        <tr class="trip-component" *ngFor="let item of items" [trip]="item"></tr>
+                        <tr class="trip-component" *ngFor="let item of items" [trip]="item" [routerLink]="['bookcarriage', '003']"></tr>
                     </tbody>
                 </table>
             </div>
-        </div>`,
+        `,
     styles: [` 
             .top {
                height: 60px;

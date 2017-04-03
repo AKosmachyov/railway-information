@@ -28,25 +28,7 @@ import { HttpService } from './service/http.service';
             </div>
         </div>       
         <div class="main-part">
-            <span><b>{{fromDisplay}} &#8212; {{toDisplay}}</b></span>
-            <div class="search-result">
-                <table class="table table-hover">
-                    <thead>
-                        <tr>
-                            <th>Поезд</th>
-                            <th>Отправление</th>
-                            <th>Прибытие</th>
-                            <th>Время в пути</th>
-                            <th>Тип вагона</th>
-                            <th>Стоимость (б.р.)</th>
-                            <th>Своб. места</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr class="trip-component" *ngFor="let item of items" [trip]="item"></tr>
-                    </tbody>
-                </table>
-            </div>
+            <router-outlet></router-outlet>           
         </div>`,
         styles: [` 
             .top {

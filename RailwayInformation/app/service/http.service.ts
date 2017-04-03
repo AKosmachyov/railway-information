@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Http, Headers, Response } from '@angular/http';
 
 import { Trip } from '../models/trip';
+import { Carriage } from '../models/carriage';
 
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/toPromise';
@@ -12,6 +13,12 @@ export class HttpService{
 
     getTrips(from: string, to: string): Promise<[Trip]>{
         return this.http.get(`/api/station?from=${encodeURIComponent(from)}&to=${encodeURIComponent(to)}`)
+            .toPromise()
+            .then(this.extractData)
+            .catch(this.handleError);
+    }
+    getSeats(trainNumber: string): Promise<[Carriage]> {
+        return this.http.get(`/api/trip?trainNumber=${encodeURIComponent(trainNumber)}`)
             .toPromise()
             .then(this.extractData)
             .catch(this.handleError);

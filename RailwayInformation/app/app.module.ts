@@ -6,11 +6,14 @@ import {Routes, RouterModule} from '@angular/router';
 
 import { AppComponent } from './app.component';
 import { TripComponent } from './trip.component';
+import { HomeComponent } from './home.component';
+import { BookCarriageComponent } from './book-carriage.component';
 
 import { HttpService } from './service/http.service';
 
 const appRoutes: Routes = [
-    { path: '', component: AppComponent },
+    { path: '', component: HomeComponent },
+    { path: 'bookcarriage/:trainNumber', component: BookCarriageComponent }    
 ];
 
 @NgModule({
@@ -22,7 +25,9 @@ const appRoutes: Routes = [
     ],
     declarations: [
         AppComponent,
-        TripComponent
+        TripComponent,
+        HomeComponent,
+        BookCarriageComponent
     ],
     providers: [ HttpService ],
     bootstrap: [AppComponent]

@@ -9,7 +9,7 @@ namespace RailwayInformation.Models
     {
         public List<RoutePoint> route;
         public string trainNumber;
-        public ICollection<Carriage> carriages;
-        public ICollection<CarriageType> carriageType;
+        public List<Carriage> carriages;
+        public List<CarriageType> carriageType;
     }
 }

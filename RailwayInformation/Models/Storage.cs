@@ -111,5 +111,10 @@ namespace RailwayInformation.Models
             }
             return rez;
         }
+        public static List<Carriage> getCarriage(string trainNumber)
+        {
+            var t = trips.Find((trip) => { return trip.trainNumber == trainNumber; });
+            return t.carriages;
+        }
     }
 }
