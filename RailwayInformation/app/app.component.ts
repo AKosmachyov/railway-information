@@ -1,4 +1,5 @@
 ﻿import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { Trip } from './models/trip';
 import { HttpService } from './service/http.service';
 
@@ -16,7 +17,7 @@ import { HttpService } from './service/http.service';
                     Куда
                     <input type="text" id="to" [(ngModel)]="to">
                     Когда
-                    <input type="date">
+                    <input type="date" value="2017-05-01" min='2017-04-03' max='2100-01-01' [(ngModel)]="time">
                     <button class="btn" (click)="get()">
                         <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
                     </button>
@@ -80,17 +81,22 @@ import { HttpService } from './service/http.service';
         `]
 })
 export class AppComponent {
-    items: Trip[] = [];
     from: string;
     to: string;
-    fromDisplay: string;
-    toDisplay: string;
-    constructor( private httpService: HttpService ) { };
+    time: Date;
+    constructor(
+        private router: Router
+    ) { };
     get() {
-        this.httpService.getTrips(this.from, this.to).then((arr) => {
-            this.fromDisplay = this.from;
-            this.toDisplay = this.to;
-            this.items = arr;
-        })        
+        if (!this.from || !this.to || !this.time)
+            return;
+        this.router.navigate(['/search'], {
+            queryParams: {
+                from: this.from,
+                to: this.to,
+                time: this.time
+
+            }
+        })
     }
 }

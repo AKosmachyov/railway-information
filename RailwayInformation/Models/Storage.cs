@@ -88,12 +88,15 @@ namespace RailwayInformation.Models
         {
             return tripTests;
         }
-        public static List<TripTest> getTrip(string from, string to)
+        public static List<TripTest> getTrip(string from, string to, string time)
         {
+            var date = DateTime.Parse(time);
             var rez = new List<TripTest>();
             var t = trips.FindAll((trip) =>
             {
-                var fromIndex = trip.route.FindIndex((point) => { return point.station == from; });
+                var fromIndex = trip.route.FindIndex((point) => {
+                    return point.station == from && point.arrive.DayOfYear == date.DayOfYear;
+                });
                 var toIndex = trip.route.FindIndex((point) => { return point.station == to; });
                 return fromIndex < toIndex && fromIndex > -1;
             });

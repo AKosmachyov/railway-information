@@ -11,8 +11,8 @@ import 'rxjs/add/operator/toPromise';
 export class HttpService{
     constructor(private http: Http){ }
 
-    getTrips(from: string, to: string): Promise<[Trip]>{
-        return this.http.get(`/api/station?from=${encodeURIComponent(from)}&to=${encodeURIComponent(to)}`)
+    getTrips(from: string, to: string, time: string): Promise<[Trip]>{
+        return this.http.get(`/api/station?from=${encodeURIComponent(from)}&to=${encodeURIComponent(to)}&time=${encodeURIComponent(time)}`)
             .toPromise()
             .then(this.extractData)
             .catch(this.handleError);

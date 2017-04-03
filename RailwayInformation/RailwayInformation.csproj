@@ -136,6 +136,7 @@
     <TypeScriptCompile Include="app\models\trip.ts" />
     <TypeScriptCompile Include="app\book-carriage.component.ts" />
     <TypeScriptCompile Include="app\service\http.service.ts" />
+    <TypeScriptCompile Include="app\search-result.component.ts" />
     <TypeScriptCompile Include="app\trip.component.ts" />
     <TypeScriptCompile Include="app\models\routepoint.ts" />
   </ItemGroup>

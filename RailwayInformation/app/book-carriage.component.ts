@@ -6,7 +6,8 @@ import { Carriage } from './models/carriage';
 @Component({
     selector: 'book-carriage',
     template: `
-            Выберите вагон
+            <span *ngIf="!val">Выберите вагон</span>
+            <span *ngIf="val">Вы выбрали: {{val}} вагон</span>
             <table class="table table-hover">
                     <thead>
                         <tr>
@@ -33,13 +34,17 @@ import { Carriage } from './models/carriage';
                     № проездного документа
                     <input type="text"/>
                     Ваш вагон: <span *ngIf="!val">не выбран</span>{{val}}
+                    <button class = "btn btn-default">Оплатить</button>
                 </div>
         `,
     styles: [`
             .userInformation {
                  display: flex;
                  flex-direction: column;
-                 width: 30%;                
+                 align-items: center;             
+            }
+            input {
+                width:400px;
             }
         `]
 })

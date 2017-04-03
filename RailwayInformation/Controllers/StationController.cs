@@ -8,9 +8,9 @@ namespace RailwayInformation.Controllers
     public class StationController : ApiController
     {    
         // GET: api/Station
-        public List<TripTest> Get(string from, string to)
+        public List<TripTest> Get(string from, string to, string time)
         {
-            return Storage.getTrip(from, to);
+            return Storage.getTrip(from, to, time);
         }
         // POST: api/Station
         public void Post([FromBody]string value)
