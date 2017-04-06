@@ -1,6 +1,5 @@
 ﻿import { Component } from '@angular/core';
-import { Router } from '@angular/router';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs/Subscription';
 import { Trip } from './models/trip';
 import { HttpService } from './service/http.service';
@@ -19,11 +18,11 @@ import { HttpService } from './service/http.service';
                             <th>Время в пути</th>
                             <th>Тип вагона</th>
                             <th>Стоимость (б.р.)</th>
-                            <th>Своб. места</th>
+                            <th>Своб. мест</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr class="trip-component" *ngFor="let item of items" [trip]="item" [routerLink]="['bookcarriage', item.trainNumber]"></tr>
+                        <tr class="trip-component" *ngFor="let item of items" [trip]="item" (click)="sendDataForCarriage(item)"></tr>
                     </tbody>
                 </table>
                 <span *ngIf = "items.length == 0">По данному маршруту и дате отправления поездов не найдено</span>
@@ -77,6 +76,15 @@ export class SearchResultComponent {
     get(from: string, to: string, time: string) {
         this.httpService.getTrips(from,to,time).then((arr) => {
             this.items = arr;
+        })
+    }
+    sendDataForCarriage(item: Trip) {
+        this.router.navigate(['/search/bookcarriage'], {
+            queryParams: {
+                trainNumber: item.trainNumber,
+                from: item.from.station.Id,
+                to: item.to.station.Id
+            }
         })
     }
 }

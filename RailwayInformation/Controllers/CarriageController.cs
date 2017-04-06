@@ -1,28 +1,31 @@
 ﻿using RailwayInformation.Models;
+using System;
 using System.Collections.Generic;
-using System.Web;
+using System.Linq;
+using System.Net;
+using System.Net.Http;
 using System.Web.Http;
 
 namespace RailwayInformation.Controllers
 {
-    public class StationController : ApiController
-    {    
-        // GET: api/Station
-        public List<TripTest> Get(string from, string to, string time)
+    public class CarriageController : ApiController
+    {
+        public List<Carriage> Get(string trainNumber, int from, int to)
         {
-            return Storage.getTrip(from, to, time);
+            return Storage.getCarriage(trainNumber, from, to);
         }
-        // POST: api/Station
+
+        // POST: api/Carriage
         public void Post([FromBody]string value)
         {
         }
 
-        // PUT: api/Station/5
+        // PUT: api/Carriage/5
         public void Put(int id, [FromBody]string value)
         {
         }
 
-        // DELETE: api/Station/5
+        // DELETE: api/Carriage/5
         public void Delete(int id)
         {
         }

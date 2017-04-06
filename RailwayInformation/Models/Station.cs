@@ -9,8 +9,9 @@ namespace RailwayInformation.Models
     {
         public int Id { get; set; }
         public string name { get; set; }
-        public Station(string name)
+        public Station(int id,string name)
         {
+            this.Id = id;
             this.name = name;           
         }
     }

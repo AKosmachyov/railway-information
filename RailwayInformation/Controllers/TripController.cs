@@ -9,14 +9,20 @@ using System.Web.Http;
 namespace RailwayInformation.Controllers
 {
     public class TripController : ApiController
-    {        
-        public List<Carriage> Get(string trainNumber)
+    {
+        public List<TripTest> Get(string from, string to, string time)
         {
-            return Storage.getCarriage(trainNumber);
+            return Storage.getTrip(from, to, time);
         }
+
         // POST: api/Trip
-        public void Post([FromBody]string value)
+        public Info Post([FromBody]dynamic data)
         {
+            string trainNumber = data.trainNumber.Value;
+            int from = Convert.ToInt16(data.from.Value);
+            int to = Convert.ToInt16(data.to.Value);
+            string carriageName = data.carriageName.Value;
+            return Storage.getInfo(trainNumber, from, to, carriageName);
         }
 
         // PUT: api/Trip/5

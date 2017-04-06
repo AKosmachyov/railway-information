@@ -13,6 +13,7 @@ namespace RailwayInformation.Models
         public Int32 emptySeat { get; set; }
         public string type { get; set; }
         public double priceFactor { get; set; }
+        public double price { get; set; }
         public Carriage(string name, Int32 emptySeat, string type, double priceFactor)
         {
             this.name = name;

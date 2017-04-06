@@ -15,7 +15,7 @@ import { HttpService } from './service/http.service';
 const appRoutes: Routes = [
     { path: '', component: HomeComponent },
     { path: 'search', component: SearchResultComponent },
-    { path: 'search/bookcarriage/:trainNumber', component: BookCarriageComponent }    
+    { path: 'search/bookcarriage', component: BookCarriageComponent }    
 ];
 
 @NgModule({

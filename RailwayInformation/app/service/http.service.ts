@@ -12,13 +12,13 @@ export class HttpService{
     constructor(private http: Http){ }
 
     getTrips(from: string, to: string, time: string): Promise<[Trip]>{
-        return this.http.get(`/api/station?from=${encodeURIComponent(from)}&to=${encodeURIComponent(to)}&time=${encodeURIComponent(time)}`)
+        return this.http.get(`/api/trip?from=${encodeURIComponent(from)}&to=${encodeURIComponent(to)}&time=${encodeURIComponent(time)}`)
             .toPromise()
             .then(this.extractData)
             .catch(this.handleError);
     }
-    getSeats(trainNumber: string): Promise<[Carriage]> {
-        return this.http.get(`/api/trip?trainNumber=${encodeURIComponent(trainNumber)}`)
+    getSeats(trainNumber: string, from: number, to: number): Promise<[Carriage]> {
+        return this.http.get(`/api/carriage?trainNumber=${encodeURIComponent(trainNumber)}&from=${from}&to=${to}`)
             .toPromise()
             .then(this.extractData)
             .catch(this.handleError);

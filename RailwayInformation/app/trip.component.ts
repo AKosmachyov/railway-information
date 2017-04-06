@@ -13,12 +13,12 @@ import { CarriageType } from "./models/CarriageType";
         <td>
             {{fromDate + from.stayTime*60000 | date:"HH:mm"}}
             <p></p>
-            {{from.station}}
+            {{from.station.name}}
         </td>
         <td>
             {{toDate | date:"HH:mm"}}
             <p></p>
-            {{to.station}}              
+            {{to.station.name}}              
         </td>
         <td>{{tripTime}}</td>        
         <td>

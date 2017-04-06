@@ -4,7 +4,8 @@
         public seats: [string],
         public emptySeat: number,
         public type: string,
-        public priceFactor: number
+        public priceFactor: number,
+        public price: number
     ) { }
     
 }

@@ -1,4 +1,4 @@
-﻿import { Component, OnInit } from '@angular/core';
+﻿import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { Trip } from './models/trip';
 import { HttpService } from './service/http.service';
@@ -17,7 +17,7 @@ import { HttpService } from './service/http.service';
                     Куда
                     <input type="text" id="to" [(ngModel)]="to">
                     Когда
-                    <input type="date" value="2017-05-01" min='2017-04-03' max='2100-01-01' [(ngModel)]="time">
+                    <input type="date" value="2017-05-01" min='2017-05-01' max='2017-05-31' [(ngModel)]="time">
                     <button class="btn" (click)="get()">
                         <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
                     </button>

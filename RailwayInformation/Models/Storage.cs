@@ -7,7 +7,7 @@ namespace RailwayInformation.Models
 {
     public static class Storage
     {
-        public static List<Station> stations = new List<Station> { new Station("1"), new Station("2") };
+        public static List<Station> stations = new List<Station> { };
         public static List<TripTest> tripTests = new List<TripTest>
         {            
         };
@@ -18,11 +18,11 @@ namespace RailwayInformation.Models
                 trainNumber = "003",
                 route = new List<RoutePoint>
                 {
-                    new RoutePoint("Москва", new DateTime(2017,5,1,12,05,0), 5, 0),
-                    new RoutePoint("Орша", new DateTime(2017,5,1,16,20,0), 5, 800),
-                    new RoutePoint("Минск", new DateTime(2017,5,1,17,32,0), 5, 1000),
-                    new RoutePoint("Брест", new DateTime(2017,5,1,23,24,0), 5, 1400),
-                    new RoutePoint("Варшава", new DateTime(2017,5,2,1,54,0), 5, 1800)
+                    new RoutePoint(new Station(0,"Москва"), new DateTime(2017,5,1,12,05,0), 5, 0),
+                    new RoutePoint(new Station(1,"Орша"), new DateTime(2017,5,1,16,20,0), 5, 800),
+                    new RoutePoint(new Station(2,"Минск"), new DateTime(2017,5,1,17,32,0), 5, 1000),
+                    new RoutePoint(new Station(3,"Брест"), new DateTime(2017,5,1,23,24,0), 5, 1400),
+                    new RoutePoint(new Station(4,"Варшава"), new DateTime(2017,5,2,1,54,0), 5, 1800)
                 },
                 carriages = new List<Carriage>
                 {
@@ -42,9 +42,9 @@ namespace RailwayInformation.Models
                 trainNumber = "009ЯЩ",
                 route = new List<RoutePoint>
                 {
-                    new RoutePoint("Минск", new DateTime(2017,5,1,13,30,0), 5, 0),
-                    new RoutePoint("Жабинка", new DateTime(2017,5,1,15,20,0), 5, 190),
-                    new RoutePoint("Брест", new DateTime(2017,5,1,17,10,0), 5, 400)
+                    new RoutePoint(new Station(5,"Минск"), new DateTime(2017,5,1,13,30,0), 5, 0),
+                    new RoutePoint(new Station(6,"Жабинка"), new DateTime(2017,5,1,15,20,0), 5, 190),
+                    new RoutePoint(new Station(7,"Брест"), new DateTime(2017,5,1,17,10,0), 5, 400)
                 },
                 carriages = new List<Carriage>
                 {
@@ -63,9 +63,9 @@ namespace RailwayInformation.Models
                 trainNumber = "009ЯЩ",
                 route = new List<RoutePoint>
                 {
-                    new RoutePoint("Минск", new DateTime(2017,5,2,13,30,0), 5, 0),
-                    new RoutePoint("Жабинка", new DateTime(2017,5,2,15,20,0), 5, 190),
-                    new RoutePoint("Брест", new DateTime(2017,5,2,18,10,0), 5, 400)
+                    new RoutePoint(new Station(8,"Минск"), new DateTime(2017,5,2,13,30,0), 5, 0),
+                    new RoutePoint(new Station(9,"Жабинка"), new DateTime(2017,5,2,15,20,0), 5, 190),
+                    new RoutePoint(new Station(10,"Брест"), new DateTime(2017,5,2,18,10,0), 5, 400)
                 },
                 carriages = new List<Carriage>
                 {
@@ -95,29 +95,47 @@ namespace RailwayInformation.Models
             var t = trips.FindAll((trip) =>
             {
                 var fromIndex = trip.route.FindIndex((point) => {
-                    return point.station == from && point.arrive.DayOfYear == date.DayOfYear;
+                    return point.station.name == from && point.arrive.DayOfYear == date.DayOfYear;
                 });
-                var toIndex = trip.route.FindIndex((point) => { return point.station == to; });
+                var toIndex = trip.route.FindIndex((point) => { return point.station.name == to; });
                 return fromIndex < toIndex && fromIndex > -1;
             });
             for (var i = 0; i < t.Count; i++)
             {
                 var item = new TripTest(
                     t[i].trainNumber,
-                    t[i].route[0].station,
-                    t[i].route[t[i].route.Count - 1].station,
-                    t[i].route.Find((station) => { return station.station == from; }),
-                    t[i].route.Find((station) => { return station.station == to; })
+                    t[i].route[0].station.name,
+                    t[i].route[t[i].route.Count - 1].station.name,
+                    t[i].route.Find((station) => { return station.station.name == from; }),
+                    t[i].route.Find((station) => { return station.station.name == to; })
                 );
                 item.carriageType = t[i].carriageType;
                 rez.Add(item);
             }
             return rez;
         }
-        public static List<Carriage> getCarriage(string trainNumber)
+        public static List<Carriage> getCarriage(string trainNumber, int from, int to)
         {
-            var t = trips.Find((trip) => { return trip.trainNumber == trainNumber; });
-            return t.carriages;
+            var trip = trips.Find((item) => { return item.trainNumber == trainNumber; });
+            
+            var f = trip.route.Find((item) => { return item.station.Id == from; });
+            var s = trip.route.Find((item) => { return item.station.Id == to; });
+            var distance = s.tripDistance - f.tripDistance;
+            for(var i = 0; i < trip.carriages.Count; i++)
+            {
+                trip.carriages[i].price = trip.carriages[i].priceFactor * distance;
+            }
+            return trip.carriages;
+        }
+        public static Info getInfo(string trainNumber, int fromId, int toId, string carriageName)
+        {            
+            var trip = trips.Find((item) => { return item.trainNumber == trainNumber; });
+            var direction = trip.route[0].station.name + "," + trip.route[trip.route.Count-1].station.name;
+            var f = trip.route.Find((item) => { return item.station.Id == fromId; });
+            var s = trip.route.Find((item) => { return item.station.Id == toId; });
+            var carriage = trip.carriages.Find((item) => { return item.name == carriageName; });
+            var rez = new Info(direction, f, s, carriage.type);
+            return rez;
         }
     }
 }
