@@ -9,24 +9,26 @@ import { Carriage } from './models/carriage';
     template: `
             <span *ngIf="!val">Выберите вагон</span>
             <span *ngIf="val">Вы выбрали: {{val}} вагон</span>
-            <table class="table table-hover">
-                    <thead>
-                        <tr>
-                            <th>Вагон</th>
-                            <th>Тип вагона</th>
-                            <th>Своб. мест</th>
-                            <th>Цена</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr *ngFor="let item of carriage" (click)="setCarriage(item)">
-                            <td>{{item.name}}</td>
-                            <td>{{item.type}}</td>
-                            <td>{{item.emptySeat}}</td>
-                            <td>{{item.price}} руб</td>
-                        </tr>
-                    </tbody>
-                </table>
+            <div class="search-field">
+                <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Вагон</th>
+                                <th>Тип вагона</th>
+                                <th>Своб. мест</th>
+                                <th>Цена</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let item of carriage" (click)="setCarriage(item)">
+                                <td>{{item.name}}</td>
+                                <td>{{item.type}}</td>
+                                <td>{{item.emptySeat}}</td>
+                                <td>{{item.price}} руб</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
                 <div class = "userInformation">
                     Фамилия
                     <input type="text" [(ngModel)]="surname"/>
@@ -44,6 +46,15 @@ import { Carriage } from './models/carriage';
                  display: flex;
                  flex-direction: column;
                  align-items: center;             
+            }
+            .search-field {
+                border-color: #ddd;
+                border-width: 1px;
+                border-radius: 4px 4px 0px 0px;
+                border-style: solid;
+            }
+            table {
+                margin-bottom: 0px;
             }
             input {
                 width:400px;
