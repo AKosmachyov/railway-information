@@ -1,8 +1,6 @@
 ﻿export class Station {
-    constructor (
-        public prefix: String,
-        public name: String,
-        public fullLocation: String
+    constructor(
+        public Id: number,
+        public name: String       
     ) { }
-    
 }

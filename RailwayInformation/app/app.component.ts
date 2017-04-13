@@ -1,6 +1,7 @@
-﻿import { Component, OnInit } from '@angular/core';
-import { TripService } from './service/trip.service';
+﻿import { Component } from '@angular/core';
+import { Router } from '@angular/router';
 import { Trip } from './models/trip';
+import { HttpService } from './service/http.service';
 
 @Component({
         selector: 'my-app',
@@ -12,41 +13,22 @@ import { Trip } from './models/trip';
                     </div>
                 <div class="col-md-8">
                     Откуда
-                    <input type="text" id="from">
+                    <input type="text" id="from" [(ngModel)]="from">
                     Куда
-                    <input type="text" id="to">
+                    <input type="text" id="to" [(ngModel)]="to">
                     Когда
-                    <input type="date">
-                    <button class="btn">
+                    <input type="date" value="2017-05-01" min='2017-05-01' max='2017-05-31' [(ngModel)]="time">
+                    <button class="btn" (click)="get()">
                         <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
                     </button>
                 </div>
                 <div class="col-md-2 navbar-right-panel">
-                    <a class="btn btn-default" href="#" role="button">Вход</a>
-                    <a class="btn btn-default" href="#" role="button">Регистрация</a>
+                    <button class="btn btn-default">Вход</button>                     
                 </div>
             </div>
-        </div>
+        </div>       
         <div class="main-part">
-            <span><b>Минск &#8212; Брест</b></span>
-            <div class="search-result">
-                <table class="table table-hover">
-                    <thead>
-                        <tr>
-                            <th>Поезд</th>
-                            <th>Отправление</th>
-                            <th>Прибытие</th>
-                            <th>Время в пути</th>
-                            <th>Тип вагона</th>
-                            <th>Стоимость (б.р.)</th>
-                            <th>Своб. места</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr class="trip-component" *ngFor="let item of items" [trip]="item"></tr>
-                    </tbody>
-                </table>
-            </div>
+            <router-outlet></router-outlet>           
         </div>`,
         styles: [` 
             .top {
@@ -65,46 +47,55 @@ import { Trip } from './models/trip';
             }
             .navbar-right-panel {
                 display: flex;
+                justify-content: center;
             }
-            .navbar-right-panel a {
-                margin-left: 5px;
+            .navbar-right-panel button {
+                border-color: #7aa1bd;
+                padding-left: 15px;
+                padding-right: 15px;
+                color: #548eaa;
+            }
+            .navbar-right-panel button:hover {
+                background-color: #7aa1bd;
+                color:white;
             }
             .main-part {
                 padding-top: 70px;
                 padding-left: 32px;   
                 padding-right: 32px;
             }
-            ul {
-                list-style-type: none;
-                padding-left: 0; 
+            input[type="date"] {                
+                padding: 5px 12px;
             }
-            .table {    
-                margin-bottom: 0px;
-            }            
-            .search-result {
-                border-color: #ddd;
-                border-width: 1px;
-                border-radius: 4px 4px 0 0;
-                border-style: solid;    
+            input {
+                border: 1px solid #ccc;
+                border-radius: 4px;
+                padding: 6px 12px;
             }
-            span b {
-                font-size: 23px;
-            }
-            .main-part span {
-                display: block;
-                margin-bottom: 5px;
-                margin-left: 15px;
+            input + button {
+                background-color: transparent;
+                font-size: 17px;
+                color: #aeb7bf;
             }
         `]
 })
-export class AppComponent implements OnInit{
-    items: Trip[] = [];
-    constructor(private tripService: TripService) {
-        this.items = this.tripService.getData();
-    }
-    
-    ngOnInit(){
-        this.items = this.tripService.getData();
-        console.log(this.items);
+export class AppComponent {
+    from: string;
+    to: string;
+    time: Date;
+    constructor(
+        private router: Router
+    ) { };
+    get() {
+        if (!this.from || !this.to || !this.time)
+            return;
+        this.router.navigate(['/search'], {
+            queryParams: {
+                from: this.from,
+                to: this.to,
+                time: this.time
+
+            }
+        })
     }
 }

@@ -1,37 +1,39 @@
 ﻿import { Component, Input, OnInit} from '@angular/core';
 import { Trip } from './models/trip';
+import { RoutePoint } from "./models/routepoint";
+import { CarriageType } from "./models/CarriageType";
 
 @Component({
     selector: '.trip-component',
     template: `        
         <td>
-            {{trip.trainNumber}}
-            {{route[0].station}} &#8212; {{route[route.length-1].station}}
+            {{trainNumber}}
+            {{direction[0]}} &#8212; {{direction[1]}}
         </td>
         <td>
-            {{route[1].arrive + route[1].stayTime | date:"HH:mm"}}
+            {{fromDate + from.stayTime*60000 | date:"HH:mm"}}
             <p></p>
-            {{route[1].station}}
+            {{from.station.name}}
         </td>
         <td>
-            {{route[2].arrive | date:"HH:mm"}}
+            {{toDate | date:"HH:mm"}}
             <p></p>
-            {{route[2].station}}              
+            {{to.station.name}}              
         </td>
         <td>{{tripTime}}</td>        
         <td>
             <ul>
-                <li *ngFor="let item of carriages">{{item.type}}</li>
+                <li *ngFor="let item of carriageType">{{item.name}}</li>
             </ul>
         </td>
         <td>
             <ul>
-                <li *ngFor="let item of carriages">{{item.price}}</li>
+                <li *ngFor="let item of carriageType">{{item.priceFactor}} руб</li>
             </ul>
         </td>
         <td>
             <ul>
-                <li *ngFor="let item of carriages">{{item.seats}}</li>
+                <li *ngFor="let item of carriageType">{{item.emptySeat}}</li>
             </ul>
         </td>`,
     styles: [`
@@ -41,47 +43,38 @@ import { Trip } from './models/trip';
             }
     `]
 })
-export class TripComponent {
-    @Input() trip: any;
+export class TripComponent implements OnInit {
+    @Input() trip: Trip;
 
-    route: any;
-    Carriages: any;
-    trainNumber: any;
-    tripTime: any;
-    carriages: any;
-
+    direction: String[];
+    from: RoutePoint;
+    fromDate: Date;
+    toDate: Date;
+    to: RoutePoint;
+    trainNumber: String;
+    carriageType: CarriageType[];
+    tripTime: string;
     ngOnInit() {
         if (this.trip) {
-            this.route = this.trip.route;
-            this.Carriages = this.trip.carriages;
+            this.direction = this.trip.direction.split(',');
+            this.from = this.trip.from;
+            this.fromDate = new Date(this.trip.from.arrive);
+            this.toDate = new Date(this.trip.to.arrive);
+            this.to = this.trip.to;
             this.trainNumber = this.trip.trainNumber;
+            this.carriageType = this.calculatePrice(this.trip.carriageType);
             this.tripTime = this.calculateTripTime();
-            this.carriages = this.getSeats();
-        }
-    
+        }    
     }
-
-    
-    calculateTripTime() {
-        let tripTime: Date = new Date(+this.route[2].arrive - +this.route[1].arrive + this.route[1].stayTime * 60000);
-        return `${tripTime.getHours()} ч ${tripTime.getMinutes()} мин`
-    }
-    getSeats() {
-        let res = {};
-        this.Carriages.forEach((item) => {
-            if (res[<string>item.type])
-                res[<string>item.type].seats += item.emptySeat;
-            else {
-                res[<string>item.type] = {
-                    price: item.priceFactor + ' руб',
-                    seats: item.emptySeat
-                }
-            }
-        });
-        let arr = [];
-        for (let key in res) {
-            arr.push(Object.assign(res[key], {type: key}));
+    calculatePrice(arr: CarriageType[]): CarriageType[] {
+        let val = this.to.tripDistance - this.from.tripDistance;
+        for (let i = 0; i < arr.length; i++) {
+            arr[i].priceFactor = Math.floor(arr[i].priceFactor * val*100)/100;
         }
         return arr;
+    }
+    calculateTripTime(): string {
+        let time = new Date(+this.toDate - +this.fromDate - this.from.stayTime * 60000);
+        return `${time.getHours()} ч ${time.getMinutes()} мин`;
     }
 }

@@ -45,14 +45,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
-      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
-      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="Microsoft.CodeDom.Providers.DotNetCompilerPlatform, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.0\lib\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll</HintPath>
       <Private>True</Private>
@@ -94,22 +86,27 @@
     <Content Include="Global.asax" />
     <Content Include="index.html" />
     <Content Include="systemjs.config.js" />
+    <Content Include="ticket.html" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\WebApiConfig.cs" />
-    <Compile Include="Controllers\CarriagesController.cs" />
-    <Compile Include="Controllers\StationsController.cs" />
+    <Compile Include="Controllers\CarriageController.cs" />
+    <Compile Include="Controllers\TripController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\Carriage.cs" />
-    <Compile Include="Models\DbInitializer.cs" />
+    <Compile Include="Models\CarriageType.cs" />
+    <Compile Include="Models\Info.cs" />
     <Compile Include="Models\Route.cs" />
     <Compile Include="Models\RoutePoint.cs" />
     <Compile Include="Models\Station.cs" />
+    <Compile Include="Models\Storage.cs" />
+    <Compile Include="Models\Trip.cs" />
+    <Compile Include="Models\TripTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -134,14 +131,17 @@
   <ItemGroup>
     <TypeScriptCompile Include="app\app.component.ts" />
     <TypeScriptCompile Include="app\app.module.ts" />
+    <TypeScriptCompile Include="app\home.component.ts" />
     <TypeScriptCompile Include="app\main.ts" />
     <TypeScriptCompile Include="app\models\carriage.ts" />
-    <TypeScriptCompile Include="app\service\trip.service.ts" />
-    <TypeScriptCompile Include="app\trip.component.ts" />
-    <TypeScriptCompile Include="app\models\route.ts" />
-    <TypeScriptCompile Include="app\models\routepoint.ts" />
+    <TypeScriptCompile Include="app\models\carriageType.ts" />
     <TypeScriptCompile Include="app\models\station.ts" />
     <TypeScriptCompile Include="app\models\trip.ts" />
+    <TypeScriptCompile Include="app\book-carriage.component.ts" />
+    <TypeScriptCompile Include="app\service\http.service.ts" />
+    <TypeScriptCompile Include="app\search-result.component.ts" />
+    <TypeScriptCompile Include="app\trip.component.ts" />
+    <TypeScriptCompile Include="app\models\routepoint.ts" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
