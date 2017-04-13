@@ -23,8 +23,7 @@ import { HttpService } from './service/http.service';
                     </button>
                 </div>
                 <div class="col-md-2 navbar-right-panel">
-                    <a class="btn btn-default" role="button">Вход</a>
-                    <button class="btn btn-default" role="button">Регистрация</button>
+                    <button class="btn btn-default">Вход</button>                     
                 </div>
             </div>
         </div>       
@@ -48,35 +47,35 @@ import { HttpService } from './service/http.service';
             }
             .navbar-right-panel {
                 display: flex;
+                justify-content: center;
             }
-            .navbar-right-panel a {
-                margin-left: 5px;
+            .navbar-right-panel button {
+                border-color: #7aa1bd;
+                padding-left: 15px;
+                padding-right: 15px;
+                color: #548eaa;
+            }
+            .navbar-right-panel button:hover {
+                background-color: #7aa1bd;
+                color:white;
             }
             .main-part {
                 padding-top: 70px;
                 padding-left: 32px;   
                 padding-right: 32px;
             }
-            ul {
-                list-style-type: none;
-                padding-left: 0; 
+            input[type="date"] {                
+                padding: 5px 12px;
             }
-            .table {    
-                margin-bottom: 0px;
-            }            
-            .search-result {
-                border-color: #ddd;
-                border-width: 1px;
-                border-radius: 4px 4px 0 0;
-                border-style: solid;    
+            input {
+                border: 1px solid #ccc;
+                border-radius: 4px;
+                padding: 6px 12px;
             }
-            span b {
-                font-size: 23px;
-            }
-            .main-part span {
-                display: block;
-                margin-bottom: 5px;
-                margin-left: 15px;
+            input + button {
+                background-color: transparent;
+                font-size: 17px;
+                color: #aeb7bf;
             }
         `]
 })
