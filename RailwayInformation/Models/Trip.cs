@@ -7,9 +7,9 @@ namespace RailwayInformation.Models
 {
     public class Trip
     {
-        public List<RoutePoint> route;
-        public string trainNumber;
-        public List<Carriage> carriages;
-        public List<CarriageType> carriageType;
+        public int id { get; set; }
+        public ICollection<Carriage> carriages { get; set; }
+        public ICollection<CarriageInformation> carriageInformation { get; set; }
+        public ICollection<ArrivalTime> arrivalTimes { get; set; }
     }
 }

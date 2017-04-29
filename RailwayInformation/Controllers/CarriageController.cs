@@ -10,9 +10,9 @@ namespace RailwayInformation.Controllers
 {
     public class CarriageController : ApiController
     {
-        public List<Carriage> Get(string trainNumber, int from, int to)
+        public List<CarriageUI> Get(int tripId, int from, int to)
         {
-            return Storage.getCarriage(trainNumber, from, to);
+            return Storage.getCarriage(tripId, from, to);
         }
 
         // POST: api/Carriage

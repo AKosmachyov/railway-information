@@ -8,11 +8,11 @@ namespace RailwayInformation.Models
     public class Info
     {
         public string direction;
-        public RoutePoint from;
-        public RoutePoint to;
+        public Point from;
+        public Point to;
         public string carriageType;
-
-        public Info(string direction, RoutePoint from, RoutePoint to, string carriageType)
+        public Info() { }
+        public Info(string direction, Point from, Point to, string carriageType)
         {
             this.direction = direction;
             this.from = from;

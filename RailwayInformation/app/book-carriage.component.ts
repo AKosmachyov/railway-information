@@ -21,9 +21,9 @@ import { Carriage } from './models/carriage';
                         </thead>
                         <tbody>
                             <tr *ngFor="let item of carriage" (click)="setCarriage(item)">
-                                <td>{{item.name}}</td>
-                                <td>{{item.type}}</td>
-                                <td>{{item.emptySeat}}</td>
+                                <td>{{item.number}}</td>
+                                <td>{{item.carriageType}}</td>
+                                <td>{{item.emptySeats}}</td>
                                 <td>{{item.price}} руб</td>
                             </tr>
                         </tbody>
@@ -65,8 +65,8 @@ import { Carriage } from './models/carriage';
         `]
 })
 export class BookCarriageComponent {
-    trainNumber: string;
-    val: string;
+    tripId: number;
+    val: number;
     price: number;
     carriage: Carriage[];
     fromId: number;
@@ -80,22 +80,22 @@ export class BookCarriageComponent {
         private router: Router
     ) { }
     setCarriage(item: Carriage) {
-        this.val = item.name;
+        this.val = item.number;
         this.price = item.price;
     }
     buy() {
         let name = encodeURIComponent(this.surname + ' ' + this.name);
-        let trainNumber = encodeURIComponent(this.trainNumber);
-        document.location.replace(`http://localhost:3000/ticket.html?name=${name}&trainNumber=${trainNumber}&from=${this.fromId}&to=${this.toId}&carriage=${this.val}`);
+        //let trainNumber = encodeURIComponent(this.trainNumber);
+        //document.location.replace(`http://localhost:3000/ticket.html?name=${name}&trainNumber=${trainNumber}&from=${this.fromId}&to=${this.toId}&carriage=${this.val}`);
     }
     ngOnInit() {
         this.sub = this.activateRoute
             .queryParams
             .subscribe(params => {
-                this.trainNumber = params['trainNumber'] || '';
+                this.tripId = params['tripId'] || 0;
                 this.fromId = params['from'] || '';
                 this.toId = params['to'] || '';
-                this.httpService.getSeats(this.trainNumber, this.fromId, this.toId).then((arr) => {
+                this.httpService.getSeats(this.tripId, this.fromId, this.toId).then((arr) => {
                     this.carriage = arr;
                 })
             });

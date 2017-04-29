@@ -81,9 +81,9 @@ export class SearchResultComponent {
     sendDataForCarriage(item: Trip) {
         this.router.navigate(['/search/bookcarriage'], {
             queryParams: {
-                trainNumber: item.trainNumber,
-                from: item.from.station.Id,
-                to: item.to.station.Id
+                tripId: item.tripId,
+                from: item.from.station.id,
+                to: item.to.station.id
             }
         })
     }

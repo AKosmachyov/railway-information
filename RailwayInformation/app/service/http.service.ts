@@ -17,8 +17,8 @@ export class HttpService{
             .then(this.extractData)
             .catch(this.handleError);
     }
-    getSeats(trainNumber: string, from: number, to: number): Promise<[Carriage]> {
-        return this.http.get(`/api/carriage?trainNumber=${encodeURIComponent(trainNumber)}&from=${from}&to=${to}`)
+    getSeats(tripId: number, from: number, to: number): Promise<[Carriage]> {
+        return this.http.get(`/api/carriage?tripId=${tripId}&from=${from}&to=${to}`)
             .toPromise()
             .then(this.extractData)
             .catch(this.handleError);

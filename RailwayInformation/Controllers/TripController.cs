@@ -10,7 +10,7 @@ namespace RailwayInformation.Controllers
 {
     public class TripController : ApiController
     {
-        public List<TripTest> Get(string from, string to, string time)
+        public List<TripUI> Get(string from, string to, string time)
         {
             return Storage.getTrip(from, to, time);
         }

@@ -7,6 +7,7 @@ export class Trip {
         public from: RoutePoint,
         public to: RoutePoint,
         public trainNumber: String,
+        public tripId: number,
         public carriageType: [CarriageType]
     ) { }
 }

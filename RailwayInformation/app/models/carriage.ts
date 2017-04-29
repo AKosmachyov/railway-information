@@ -1,11 +1,8 @@
 ﻿export class Carriage {
-    constructor (
-        public name: string,
-        public seats: [string],
-        public emptySeat: number,
-        public type: string,
-        public priceFactor: number,
+    constructor(
+        public number: number,
+        public emptySeats: number,
+        public carriageType: string,        
         public price: number
     ) { }
-    
 }

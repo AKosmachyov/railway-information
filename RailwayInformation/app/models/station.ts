@@ -1,6 +1,6 @@
 ﻿export class Station {
     constructor(
-        public Id: number,
+        public id: number,
         public name: String       
     ) { }
 }
