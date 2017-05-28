@@ -76,6 +76,7 @@ import { HttpService } from './service/http.service';
                 background-color: transparent;
                 font-size: 17px;
                 color: #aeb7bf;
+                outline: none;    
             }
         `]
 })
