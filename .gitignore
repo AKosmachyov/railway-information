@@ -29,6 +29,7 @@ node_modules/
 **/app/**/*.js
 **/app/**/*.map
 .vs/
+App_Data
 ###################
 # Web publish log #
 ###################

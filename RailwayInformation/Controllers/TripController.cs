@@ -24,15 +24,5 @@ namespace RailwayInformation.Controllers
             string carriageName = data.carriageName.Value;
             return Storage.getInfo(trainNumber, from, to, carriageName);
         }
-
-        // PUT: api/Trip/5
-        public void Put(int id, [FromBody]string value)
-        {
-        }
-
-        // DELETE: api/Trip/5
-        public void Delete(int id)
-        {
-        }
     }
 }

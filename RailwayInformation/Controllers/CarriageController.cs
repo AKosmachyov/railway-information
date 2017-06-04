@@ -14,20 +14,5 @@ namespace RailwayInformation.Controllers
         {
             return Storage.getCarriage(tripId, from, to);
         }
-
-        // POST: api/Carriage
-        public void Post([FromBody]string value)
-        {
-        }
-
-        // PUT: api/Carriage/5
-        public void Put(int id, [FromBody]string value)
-        {
-        }
-
-        // DELETE: api/Carriage/5
-        public void Delete(int id)
-        {
-        }
     }
 }
