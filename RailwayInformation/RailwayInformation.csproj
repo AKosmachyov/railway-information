@@ -91,9 +91,11 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="app\components\authorization.component.css" />
     <Content Include="Global.asax" />
     <Content Include="index.html" />
-    <Content Include="systemjs.config.js" />
+    <Content Include="app\systemjs.config.js" />
+    <Content Include="public\images\spinner.gif" />
     <Content Include="ticket.html" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
@@ -143,18 +145,22 @@
     <Service Include="{4A0DDDB5-7A95-4FBF-97CC-616D07737A77}" />
   </ItemGroup>
   <ItemGroup>
-    <TypeScriptCompile Include="app\app.component.ts" />
+    <TypeScriptCompile Include="app\components\app.component.ts" />
     <TypeScriptCompile Include="app\app.module.ts" />
-    <TypeScriptCompile Include="app\home.component.ts" />
+    <TypeScriptCompile Include="app\components\checkin.component.ts" />
+    <TypeScriptCompile Include="app\components\login.component.ts" />
+    <TypeScriptCompile Include="app\components\home.component.ts" />
     <TypeScriptCompile Include="app\main.ts" />
     <TypeScriptCompile Include="app\models\carriage.ts" />
     <TypeScriptCompile Include="app\models\carriageType.ts" />
+    <TypeScriptCompile Include="app\models\User.ts" />
     <TypeScriptCompile Include="app\models\station.ts" />
     <TypeScriptCompile Include="app\models\trip.ts" />
-    <TypeScriptCompile Include="app\book-carriage.component.ts" />
+    <TypeScriptCompile Include="app\components\book-carriage.component.ts" />
+    <TypeScriptCompile Include="app\service\auth.service.ts" />
     <TypeScriptCompile Include="app\service\http.service.ts" />
-    <TypeScriptCompile Include="app\search-result.component.ts" />
-    <TypeScriptCompile Include="app\trip.component.ts" />
+    <TypeScriptCompile Include="app\components\search-result.component.ts" />
+    <TypeScriptCompile Include="app\components\trip.component.ts" />
     <TypeScriptCompile Include="app\models\routepoint.ts" />
   </ItemGroup>
   <PropertyGroup>

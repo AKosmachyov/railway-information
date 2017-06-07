@@ -1,7 +1,8 @@
 ﻿import { Component } from '@angular/core';
 import { Router } from '@angular/router';
-import { Trip } from './models/trip';
-import { HttpService } from './service/http.service';
+
+import { Trip } from '../models/trip';
+import { HttpService } from '../service/http.service';
 
 @Component({
         selector: 'my-app',

@@ -1,7 +1,8 @@
 ﻿import { Component, Input, OnInit} from '@angular/core';
-import { Trip } from './models/trip';
-import { RoutePoint } from "./models/routepoint";
-import { CarriageType } from "./models/CarriageType";
+
+import { Trip } from '../models/trip';
+import { RoutePoint } from "../models/routepoint";
+import { CarriageType } from "../models/CarriageType";
 
 @Component({
     selector: '.trip-component',

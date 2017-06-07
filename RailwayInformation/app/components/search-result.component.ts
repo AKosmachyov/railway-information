@@ -1,14 +1,15 @@
 ﻿import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs/Subscription';
-import { Trip } from './models/trip';
-import { HttpService } from './service/http.service';
+
+import { Trip } from '../models/trip';
+import { HttpService } from '../service/http.service';
 
 @Component({
     selector: 'search-result',
     template: `
             <span><b>{{from}} &#8212; {{to}}</b></span>
-            <div class="search-field">
+            <div *ngIf="items.length > 0" class="search-field">
                 <table class="table table-hover" *ngIf = "items.length > 0">
                     <thead>
                         <tr>
@@ -25,8 +26,9 @@ import { HttpService } from './service/http.service';
                         <tr class="trip-component" *ngFor="let item of items" [trip]="item" (click)="sendDataForCarriage(item)"></tr>
                     </tbody>
                 </table>
-                <span *ngIf = "items.length == 0">По данному маршруту и дате отправления поездов не найдено</span>
             </div>
+            <img *ngIf="isWaiting" src="/public/images/spinner.gif">
+            <div *ngIf="dispalayError" class="alert alert-warning" role="alert">По данному маршруту и дате отправления поездов не найдено</div>
         `,
     styles: [`
             ul {
@@ -45,7 +47,14 @@ import { HttpService } from './service/http.service';
             span b {
                 padding-left: 15px;
                 font-size: 23px;
-            }            
+            }
+            img {
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                height: 100px;
+                text-align: center;
+            }   
         `]
 })
 export class SearchResultComponent {
@@ -53,6 +62,8 @@ export class SearchResultComponent {
     from: string;
     to: string;
     time: string;
+    isWaiting: boolean = false;
+    dispalayError: boolean = false;
     private sub: Subscription;
     constructor(
         private httpService: HttpService,
@@ -69,13 +80,20 @@ export class SearchResultComponent {
                 this.get(this.from, this.to, this.time);
             });
     }
-
     ngOnDestroy() {
         this.sub.unsubscribe();
     }
     get(from: string, to: string, time: string) {
-        this.httpService.getTrips(from,to,time).then((arr) => {
+        this.isWaiting = true;
+        this.httpService.getTrips(from, to, time).then((arr) => {
             this.items = arr;
+            this.isWaiting = false;
+            if (arr.length > 0)
+                return;
+            this.dispalayError = true;
+        }, () => {
+            this.isWaiting = false;
+            this.dispalayError = true;
         })
     }
     sendDataForCarriage(item: Trip) {
