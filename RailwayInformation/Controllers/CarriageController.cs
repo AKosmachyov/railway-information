@@ -10,9 +10,13 @@ namespace RailwayInformation.Controllers
 {
     public class CarriageController : ApiController
     {
-        public List<CarriageUI> Get(int tripId, int from, int to)
-        {
-            return Storage.getCarriage(tripId, from, to);
+        public IHttpActionResult Get(int tripId, int from, int to)
+        { 
+            var carriages = Storage.getCarriage(tripId, from, to);
+
+            if (carriages.Capacity == 0)
+                return BadRequest();
+            return Ok(carriages);
         }
     }
 }

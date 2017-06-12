@@ -10,9 +10,17 @@ namespace RailwayInformation.Controllers
 {
     public class TripController : ApiController
     {
-        public List<TripUI> Get(string from, string to, string time)
+        public IHttpActionResult Get(string from, string to, string time)
         {
-            return Storage.getTrip(from, to, time);
+            DateTime timeDeparture;
+            if (from == null || to == null || from.Length == 0 || to.Length == 0 || !DateTime.TryParse(time, out timeDeparture))
+                return BadRequest();
+
+            var trips = Storage.getTrip(from, to, timeDeparture);
+            
+            if (trips.Capacity == 0)            
+                return NotFound();
+            return Ok(trips);            
         }
 
         // POST: api/Trip

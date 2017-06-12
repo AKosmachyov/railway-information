@@ -6,14 +6,9 @@ using System.Web;
 namespace RailwayInformation.Models
 {
     public static class Storage
-    {
-        public static List<Station> stations = new List<Station> { };
-        public static List<TripUI> tripTests = new List<TripUI> { };
-        public static List<Trip> trips = new List<Trip>();
-            
-        public static List<TripUI> getTrip(string from, string to, string time)
+    {            
+        public static List<TripUI> getTrip(string from, string to, DateTime date)
         {
-            var date = DateTime.Parse(time);
             var dateMax = date.AddDays(1);
             var rez = new List<TripUI>();
 
@@ -24,6 +19,10 @@ namespace RailwayInformation.Models
             var arrivalTimesTo = DB._db.ArrivalTimes.Include("Point").Include("Trip").Where(arrival =>
               arrival.point.station.name == to && arrival.arriveTime >= date && arrival.arriveTime < dateMax);
 
+            if (arrivalTimesFrom.Count() == 0 || arrivalTimesTo.Count() == 0)
+            {
+                return rez;
+            }
             foreach (ArrivalTime itemFrom in arrivalTimesFrom)
             {
                 foreach (ArrivalTime itemTo in arrivalTimesTo)
@@ -42,8 +41,15 @@ namespace RailwayInformation.Models
             var carriageType = DB._db.CarriageTypes.ToList();
             var trip = DB._db.Trips.Include("carriages").FirstOrDefault(x => x.id == tripId);
 
+            if (trip == null)
+                return rez;
+
             var fromPoint = DB._db.ArrivalTimes.Include("Point").FirstOrDefault(x => x.point.station.id == from && x.trip.id == trip.id).point;
             var toPoint = DB._db.ArrivalTimes.Include("Point").FirstOrDefault(x => x.point.station.id == to && x.trip.id == trip.id).point;
+
+            if (fromPoint == null || toPoint == null)
+                return rez;
+                 
             double tripDistance = toPoint.tripDistance - fromPoint.tripDistance;
             foreach (var item in trip.carriages)
             {

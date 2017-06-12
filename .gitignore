@@ -28,6 +28,7 @@ TestResults/
 node_modules/
 **/app/**/*.js
 **/app/**/*.map
+!systemjs.config.js
 .vs/
 App_Data
 ###################
