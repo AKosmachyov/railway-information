@@ -10,8 +10,6 @@ namespace RailwayInformation
     {
         public AuthContext()
             : base("AuthContext")
-        {
-
-        }
+        { }
     }
 }
