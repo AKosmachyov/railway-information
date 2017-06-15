@@ -83,6 +83,7 @@ export class BookCarriageComponent {
     tripId: number;
     val: number;
     price: number;
+    carriageId: number;
     carriage: Carriage[] = [];
     fromId: number;
     toId: number;
@@ -100,11 +101,11 @@ export class BookCarriageComponent {
     setCarriage(item: Carriage) {
         this.val = item.number;
         this.price = item.price;
+        this.carriageId = item.id;
     }
     buy() {
-        let name = encodeURIComponent(this.surname + ' ' + this.name);
-        //let trainNumber = encodeURIComponent(this.trainNumber);
-        //document.location.replace(`http://localhost:3000/ticket.html?name=${name}&trainNumber=${trainNumber}&from=${this.fromId}&to=${this.toId}&carriage=${this.val}`);
+        this.httpService.bookCarriage(this.tripId, this.fromId, this.toId, this.carriageId)
+            .then((data) => console.log(data));        
     }
     ngOnInit() {
         this.sub = this.activateRoute

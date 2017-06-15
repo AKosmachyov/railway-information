@@ -23,6 +23,18 @@ export class HttpService{
             .then(this.extractData)
             .catch(this.handleError);
     }
+    bookCarriage(tripId: number, from: number, to: number, carriageId: number): Promise<[Carriage]> {
+        let obj = {
+            tripId: tripId,
+            fromId: from,
+            toId: to,
+            carriageId: carriageId
+        }        
+        return this.http.post('/api/carriage', obj)
+            .toPromise()
+            .then(this.extractData)
+            .catch(this.handleError);
+    }
     private extractData(res: Response) {
         let body = res.json();
         return body || { };

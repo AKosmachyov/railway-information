@@ -13,8 +13,9 @@ namespace RailwayInformation.Models
             var rez = new List<TripUI>();
 
             //Остановки со станцией from
-            var arrivalTimesFrom = DB._db.ArrivalTimes.Include("Point").Include("Trip").Include("Route").Where(arrival =>
-                arrival.point.station.name == from && arrival.arriveTime >= date && arrival.arriveTime < dateMax);
+            var arrivalTimesFrom = DB._db.ArrivalTimes.Include("Point").Include("Trip").Include("Route")
+                .Where(arrival => arrival.point.station.name == from &&
+                       arrival.arriveTime >= date && arrival.arriveTime < dateMax);
             //Остановки со станцией to
             var arrivalTimesTo = DB._db.ArrivalTimes.Include("Point").Include("Trip").Where(arrival =>
               arrival.point.station.name == to && arrival.arriveTime >= date && arrival.arriveTime < dateMax);
@@ -44,8 +45,10 @@ namespace RailwayInformation.Models
             if (trip == null)
                 return rez;
 
-            var fromPoint = DB._db.ArrivalTimes.Include("Point").FirstOrDefault(x => x.point.station.id == from && x.trip.id == trip.id).point;
-            var toPoint = DB._db.ArrivalTimes.Include("Point").FirstOrDefault(x => x.point.station.id == to && x.trip.id == trip.id).point;
+            var fromPoint = DB._db.ArrivalTimes.Include("Point")
+                .FirstOrDefault(x => x.point.station.id == from && x.trip.id == trip.id).point;
+            var toPoint = DB._db.ArrivalTimes.Include("Point")
+                .FirstOrDefault(x => x.point.station.id == to && x.trip.id == trip.id).point;
 
             if (fromPoint == null || toPoint == null)
                 return rez;
@@ -54,7 +57,8 @@ namespace RailwayInformation.Models
             foreach (var item in trip.carriages)
             {
                 rez.Add(new CarriageUI()
-                {
+                { 
+                    id = item.id,
                     number = item.number,
                     carriageType = item.carriageType.name,
                     emptySeats = item.emptySeats,
@@ -63,16 +67,56 @@ namespace RailwayInformation.Models
             }
             return rez;
         }
-        public static Info getInfo(string trainNumber, int fromId, int toId, string carriageName)
+        public static Ticket bookCarriage(int tripId, int fromId, int toId, int carriageId)
         {
-            //var trip = trips.Find((item) => { return item.trainNumber == trainNumber; });
-            //var direction = trip.route[0].station.name + "," + trip.route[trip.route.Count-1].station.name;
-            //var f = trip.route.Find((item) => { return item.station.Id == fromId; });
-            //var s = trip.route.Find((item) => { return item.station.Id == toId; });
-            //var carriage = trip.carriages.Find((item) => { return item.name == carriageName; });
-            //var rez = new Info(direction, f, s, carriage.type);
-            //return rez;
-            return new Info();
+            var trip = DB._db.Trips.Include("Carriages").Include("CarriageInformation").FirstOrDefault(x => x.id == tripId);
+            if (trip == null)
+                return null;
+            var arrivalTimeFrom = DB._db.ArrivalTimes.Include("Point").Include("Route")
+                .FirstOrDefault(x => x.point.station.id == fromId && x.trip.id == tripId);
+            var arrivalTimeTo = DB._db.ArrivalTimes.Include("Point")
+                .FirstOrDefault(x => x.point.station.id == toId && x.trip.id == trip.id);
+
+            var from = arrivalTimeFrom.point;
+            var to = arrivalTimeTo.point;
+
+            Carriage carriage = trip.carriages.FirstOrDefault(x => x.id == carriageId);
+
+            if (to == null || from == null || from.tripDistance > to.tripDistance || carriage == null || carriage.emptySeats == 0)
+                return null;
+
+            carriage = DB._db.Carriages.Include("CarriageType").FirstOrDefault(x => x.id == carriageId);
+            carriage.emptySeats--;
+            CarriageInformation carrInfo = trip.carriageInformation.FirstOrDefault(x => x.carriageType.id == carriage.carriageType.id);
+            carrInfo.emptySeats--;
+            DB._db.SaveChanges();            
+            
+            var stationFrom = DB._db.Points.Include("station").FirstOrDefault(x => x.id == from.id).station;
+            var stationTo = DB._db.Points.Include("station").FirstOrDefault(x => x.id == to.id).station;
+                        
+            var ticket = new Ticket()
+            {     
+                userName = "Я",
+                tripDirection = String.Format("{0},{1}", arrivalTimeFrom.route.name, arrivalTimeFrom.route.direction),
+                carriage = carriage.number,
+                from = new RoutePointUi()
+                {
+                    tripDistance = from.tripDistance,
+                    stayTime = from.stayTime,
+                    station = from.station,
+                    arrive = arrivalTimeFrom.arriveTime
+                },
+                to = new RoutePointUi()
+                {
+                    tripDistance = to.tripDistance,
+                    stayTime = to.stayTime,
+                    station = to.station,
+                    arrive = arrivalTimeTo.arriveTime
+                },
+                userOwner = 1
+            };
+            //DB._db.Tickets.Add(ticket);
+            return ticket;
         }
         private static TripUI createTripUI(ArrivalTime from, ArrivalTime to)
         {

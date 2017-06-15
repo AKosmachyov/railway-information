@@ -19,8 +19,8 @@
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <UseIISExpress>true</UseIISExpress>
     <IISExpressSSLPort />
-    <IISExpressAnonymousAuthentication />
-    <IISExpressWindowsAuthentication />
+    <IISExpressAnonymousAuthentication>enabled</IISExpressAnonymousAuthentication>
+    <IISExpressWindowsAuthentication>enabled</IISExpressWindowsAuthentication>
     <IISExpressUseClassicPipelineMode />
     <UseGlobalApplicationHostFile />
     <NuGetPackageImportStamp>
@@ -147,6 +147,7 @@
     <Compile Include="AuthRepository.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\CarriageController.cs" />
+    <Compile Include="Controllers\TicketController.cs" />
     <Compile Include="Controllers\TripController.cs" />
     <Compile Include="DB.cs" />
     <Compile Include="Global.asax.cs">
@@ -158,12 +159,12 @@
     <Compile Include="Models\CarriageType.cs" />
     <Compile Include="Models\CarriageTypeUi.cs" />
     <Compile Include="Models\CarriageUI.cs" />
-    <Compile Include="Models\Info.cs" />
     <Compile Include="Models\Point.cs" />
     <Compile Include="Models\Route.cs" />
     <Compile Include="Models\RoutePointUi.cs" />
     <Compile Include="Models\Station.cs" />
     <Compile Include="Models\Storage.cs" />
+    <Compile Include="Models\Ticket.cs" />
     <Compile Include="Models\Trip.cs" />
     <Compile Include="Models\TripUI.cs" />
     <Compile Include="Models\UserModel.cs" />

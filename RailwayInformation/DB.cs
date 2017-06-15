@@ -17,6 +17,7 @@ namespace RailwayInformation
         {
             Database.SetInitializer<DBContext>(new DBInitializer());
         }
+        //public DbSet<Ticket> Tickets { get; set; }
         public DbSet<ArrivalTime> ArrivalTimes { get; set; }
         public DbSet<Carriage> Carriages { get; set; }
         public DbSet<CarriageInformation> CarriageInformations { get; set; }

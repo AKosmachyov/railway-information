@@ -18,5 +18,25 @@ namespace RailwayInformation.Controllers
                 return BadRequest();
             return Ok(carriages);
         }
+        // book cariage
+        public IHttpActionResult Post([FromBody]dynamic data)
+        {
+            try
+            {
+                int tripId = Convert.ToInt32(data.tripId.Value);
+                int from = Convert.ToInt32(data.fromId.Value);
+                int to = Convert.ToInt32(data.toId.Value);
+                int carriageId = Convert.ToInt32(data.carriageId.Value);
+           
+                var ticket = Storage.bookCarriage(tripId, from, to, carriageId);
+                if (ticket == null)
+                    return NotFound();
+                return Ok(ticket);
+            }
+            catch (Exception)
+            {
+                return BadRequest();
+            }
+        }
     }
 }

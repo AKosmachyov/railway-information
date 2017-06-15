@@ -22,15 +22,5 @@ namespace RailwayInformation.Controllers
                 return NotFound();
             return Ok(trips);            
         }
-
-        // POST: api/Trip
-        public Info Post([FromBody]dynamic data)
-        {
-            string trainNumber = data.trainNumber.Value;
-            int from = Convert.ToInt16(data.from.Value);
-            int to = Convert.ToInt16(data.to.Value);
-            string carriageName = data.carriageName.Value;
-            return Storage.getInfo(trainNumber, from, to, carriageName);
-        }
     }
 }

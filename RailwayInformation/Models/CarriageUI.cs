@@ -7,6 +7,7 @@ namespace RailwayInformation.Models
 {
     public class CarriageUI
     {
+        public int id { get; set; }
         public int number { get; set; }
         public string carriageType { get; set; }
         public int emptySeats { get; set; }
