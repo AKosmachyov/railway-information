@@ -197,9 +197,12 @@
     <TypeScriptCompile Include="app\components\checkin.component.ts" />
     <TypeScriptCompile Include="app\components\login.component.ts" />
     <TypeScriptCompile Include="app\components\home.component.ts" />
+    <TypeScriptCompile Include="app\components\profile.component.ts" />
+    <TypeScriptCompile Include="app\components\ticket.component.ts" />
     <TypeScriptCompile Include="app\main.ts" />
     <TypeScriptCompile Include="app\models\carriage.ts" />
     <TypeScriptCompile Include="app\models\carriageType.ts" />
+    <TypeScriptCompile Include="app\models\ticket.ts" />
     <TypeScriptCompile Include="app\models\User.ts" />
     <TypeScriptCompile Include="app\models\station.ts" />
     <TypeScriptCompile Include="app\models\trip.ts" />

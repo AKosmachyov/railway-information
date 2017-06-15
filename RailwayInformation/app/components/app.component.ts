@@ -11,16 +11,22 @@ import { AuthService } from '../service/auth.service';
     template: `
             <div class="top">
                 <div class="header">
-                    <div class="col-md-offset-2 col-md-8">
+                    <div class="col-xs-8">
                         <a [routerLink]="['/']">Информаторий ЖД</a>
                     </div>
-                <div class="col-xs-2 navbar-right-panel">
+                <div class="col-xs-4 navbar-right-panel">
                     <div *ngIf = "!user">
                         <a class="btn btn-default" [routerLink]="['/login']">Вход</a>
                         <a class="btn btn-default" [routerLink]="['/checkin']">Регистрация</a>
                     </div>
                     <div *ngIf = "!!user">
                         <span>{{user.email}}</span>
+                        <a class="btn btn-default" [routerLink]="['/profile']">
+                            <span class="glyphicon glyphicon-user"></span>
+                        </a>
+                        <button (click)="logOut()" class="btn btn-default">
+                            <span class="glyphicon glyphicon-off"></span>
+                        </button>
                     </div>
                 </div>
             </div>
@@ -47,16 +53,6 @@ import { AuthService } from '../service/auth.service';
                 display: flex;
                 justify-content: center;
             }
-            .navbar-right-panel button {
-                border-color: #7aa1bd;
-                padding-left: 15px;
-                padding-right: 15px;
-                color: #548eaa;
-            }
-            .navbar-right-panel button:hover {
-                background-color: #7aa1bd;
-                color:white;
-            }
             .main-part {
                 padding-top: 70px;
                 padding-left: 32px;   
@@ -69,7 +65,13 @@ export class AppComponent implements DoCheck {
     constructor(private authService: AuthService) {
         this.user = authService.currentUser;
     }
+
     ngDoCheck() {
         this.user = this.authService.currentUser;
+    }
+
+    logOut() {
+        this.authService.logout();
+        this.user = null;
     }
 }

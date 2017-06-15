@@ -11,6 +11,8 @@ import { BookCarriageComponent } from './components/book-carriage.component';
 import { SearchResultComponent } from './components/search-result.component';
 import { CheckinComponent } from './components/checkin.component';
 import { LoginComponent } from './components/login.component';
+import { ProfileComponent } from './components/profile.component';
+import { TicketComponent } from './components/ticket.component';
 
 import { HttpService } from './service/http.service';
 import { AuthService } from './service/auth.service';
@@ -21,6 +23,7 @@ const appRoutes: Routes = [
     { path: 'search/bookcarriage', component: BookCarriageComponent },
     { path: 'checkin', component: CheckinComponent },
     { path: 'login', component: LoginComponent },
+    { path: 'profile', component: ProfileComponent },
     { path: '*', component: HomeComponent }   
 ];
 
@@ -38,7 +41,9 @@ const appRoutes: Routes = [
         BookCarriageComponent,
         SearchResultComponent,
         CheckinComponent,
-        LoginComponent
+        LoginComponent,
+        ProfileComponent,
+        TicketComponent
     ],
     providers: [
         HttpService,

@@ -89,7 +89,7 @@ namespace RailwayInformation.Models
 
             carriage = DB._db.Carriages.Include("CarriageType").FirstOrDefault(x => x.id == carriageId);
             carriage.emptySeats--;
-            CarriageInformation carrInfo = trip.carriageInformation.FirstOrDefault(x => x.carriageType.id == carriage.carriageType.id);
+            CarriageInformation carrInfo = trip.carriageInformation.FirstOrDefault(x => x.carriageType != null && x.carriageType.id == carriage.carriageType.id);
             carrInfo.emptySeats--;
             DB._db.SaveChanges();            
             
@@ -105,6 +105,7 @@ namespace RailwayInformation.Models
                 price = price,
                 tripDirection = String.Format("{0},{1}", arrivalTimeFrom.route.name, arrivalTimeFrom.route.direction),
                 carriage = carriage.number,
+                carriageType = carriage.carriageType.name,
                 fromStation = from.station,
                 fromDepart = arrivalTimeFrom.arriveTime.AddMinutes(from.stayTime),
                 toStation = to.station,
@@ -112,7 +113,12 @@ namespace RailwayInformation.Models
                 userOwner = userId
             };
             DB._db.Tickets.Add(ticket);
+            DB._db.SaveChanges();
             return ticket;
+        }
+        public static IQueryable<Ticket> getTickets(string userId)
+        {   
+            return DB._db.Tickets.Where(x => x.userOwner == userId);
         }
         private static TripUI createTripUI(ArrivalTime from, ArrivalTime to)
         {

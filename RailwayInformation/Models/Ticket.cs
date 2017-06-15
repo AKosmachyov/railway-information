@@ -14,6 +14,7 @@ namespace RailwayInformation.Models
         public string docId { get; set; }
         public string tripDirection { get; set; }
         public int carriage { get; set; }
+        public string carriageType { get; set; }
         public Station fromStation { get; set; }
         public DateTime fromDepart { get; set; }
         public Station toStation { get; set; }

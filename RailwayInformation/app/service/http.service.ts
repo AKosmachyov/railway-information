@@ -5,6 +5,7 @@ import { AuthService } from './auth.service';
 
 import { Trip } from '../models/trip';
 import { Carriage } from '../models/carriage';
+import { Ticket } from '../models/ticket';
 
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/toPromise';
@@ -40,6 +41,12 @@ export class HttpService{
             docId: docId
         }        
         return this.http.post('/api/carriage', obj, { headers: this.authService.getAuthorizationHeader() })
+            .toPromise()
+            .then(this.extractData)
+            .catch(this.handleError);
+    }
+    getTickets(): Promise<Ticket[]> {
+        return this.http.get('/api/ticket', { headers: this.authService.getAuthorizationHeader() })
             .toPromise()
             .then(this.extractData)
             .catch(this.handleError);
