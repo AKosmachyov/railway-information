@@ -29,6 +29,7 @@ node_modules/
 **/app/**/*.js
 **/app/**/*.map
 !systemjs.config.js
+!ticket.html
 .vs/
 App_Data
 ###################

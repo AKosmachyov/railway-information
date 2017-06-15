@@ -1,7 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Net;
+using System.Text;
 using System.Web;
+using System.Web.Hosting;
+using TheArtOfDev.HtmlRenderer.PdfSharp;
 
 namespace RailwayInformation.Models
 {
@@ -159,5 +164,37 @@ namespace RailwayInformation.Models
             };
             return tripUi;
         }
+        public static Byte[] getPdf (int id)
+        {
+            var ticket = DB._db.Tickets.FirstOrDefault(x => x.id == id);
+            if (ticket == null)
+                return null;
+            var str = HostingEnvironment.MapPath(@"~/App_Data/ticket.html");
+
+            StringBuilder sb = new StringBuilder();
+            sb.Append(File.ReadAllText(str));
+            sb.Replace("{orderNumber}", ticket.id.ToString());
+            var arr = ticket.tripDirection.Split(',');
+            var tempStr = String.Format("{0} {1}—{2}", arr[0], arr[1], arr[2]);
+            sb.Replace("{direction}", tempStr);
+
+            tempStr = String.Format("{0} {1}", ticket.fromStation.name, ticket.fromDepart.ToString("g"));
+            sb.Replace("{from}", tempStr);
+            tempStr = String.Format("{0} {1}", ticket.toStation.name, ticket.toArrive.ToString("g"));
+            sb.Replace("{to}", tempStr);
+
+            tempStr = String.Format("{0} {1}", ticket.carriage, ticket.carriageType);
+            sb.Replace("{carriage}", tempStr);
+
+            Byte[] res = null;
+            using (MemoryStream ms = new MemoryStream())
+            {
+                var pdf = PdfGenerator.GeneratePdf(sb.ToString(), PdfSharp.PageSize.Letter);
+                pdf.Save(ms);
+                res = ms.ToArray();
+            }
+            return res;
+        }
+
     }
 }
