@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Http, Headers, Response } from '@angular/http';
 
+import { AuthService } from './auth.service';
+
 import { Trip } from '../models/trip';
 import { Carriage } from '../models/carriage';
 
@@ -9,16 +11,21 @@ import 'rxjs/add/operator/toPromise';
 
 @Injectable()
 export class HttpService{
-    constructor(private http: Http){ }
+    constructor(
+        private http: Http,
+        private authService: AuthService
+    ) { }
 
     getTrips(from: string, to: string, time: string): Promise<[Trip]>{
-        return this.http.get(`/api/trip?from=${encodeURIComponent(from)}&to=${encodeURIComponent(to)}&time=${encodeURIComponent(time)}`)
+        return this.http.get(`/api/trip?from=${encodeURIComponent(from)}&to=${encodeURIComponent(to)}&` +
+                `time=${encodeURIComponent(time)}`, { headers: this.authService.getAuthorizationHeader() })
             .toPromise()
             .then(this.extractData)
             .catch(this.handleError);
     }
     getSeats(tripId: number, from: number, to: number): Promise<[Carriage]> {
-        return this.http.get(`/api/carriage?tripId=${tripId}&from=${from}&to=${to}`)
+        return this.http.get(`/api/carriage?tripId=${tripId}&from=${from}&to=${to}`,
+                { headers: this.authService.getAuthorizationHeader() })
             .toPromise()
             .then(this.extractData)
             .catch(this.handleError);
@@ -30,7 +37,7 @@ export class HttpService{
             toId: to,
             carriageId: carriageId
         }        
-        return this.http.post('/api/carriage', obj)
+        return this.http.post('/api/carriage', obj, { headers: this.authService.getAuthorizationHeader() })
             .toPromise()
             .then(this.extractData)
             .catch(this.handleError);

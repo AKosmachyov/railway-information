@@ -13,7 +13,7 @@ import { HttpService } from '../service/http.service';
                         <a [routerLink]="['/']">Информаторий ЖД</a>
                     </div>
                 <div class="col-xs-2 navbar-right-panel">
-                    <button class="btn btn-default">Вход</button>                     
+                    <a class="btn btn-default" [routerLink]="['/login']">Вход</a>                     
                 </div>
             </div>
         </div>       

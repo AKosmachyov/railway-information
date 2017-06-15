@@ -62,7 +62,7 @@ export class LoginComponent {
         private router: Router
     ) {};
     onSubmit(): void {
-        
+        this.authService.login(this.user.email, this.user.password);
     }
     showPassword(flag: boolean){
         this.passwordInputType = flag ? "text" : "password";
