@@ -70,7 +70,7 @@ export class TripComponent implements OnInit {
     calculatePrice(arr: CarriageType[]): CarriageType[] {
         let val = this.to.tripDistance - this.from.tripDistance;
         for (let i = 0; i < arr.length; i++) {
-            arr[i].priceFactor = Math.floor(arr[i].priceFactor * val*100)/100;
+            arr[i].priceFactor = Math.round(arr[i].priceFactor * val * 100) / 100;
         }
         return arr;
     }

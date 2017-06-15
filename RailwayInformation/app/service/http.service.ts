@@ -30,12 +30,14 @@ export class HttpService{
             .then(this.extractData)
             .catch(this.handleError);
     }
-    bookCarriage(tripId: number, from: number, to: number, carriageId: number): Promise<[Carriage]> {
+    bookCarriage(tripId: number, from: number, to: number, carriageId: number, userName: string, docId: string): Promise<[Carriage]> {
         let obj = {
             tripId: tripId,
             fromId: from,
             toId: to,
-            carriageId: carriageId
+            carriageId: carriageId,
+            userName: userName,
+            docId: docId
         }        
         return this.http.post('/api/carriage', obj, { headers: this.authService.getAuthorizationHeader() })
             .toPromise()

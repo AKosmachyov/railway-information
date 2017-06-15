@@ -32,14 +32,11 @@ import { Carriage } from '../models/carriage';
                 </table>
             </div>
             <div class = "userInformation">
-                <label for="surname">Фамилия</label>                
-                <input type="text" id="surname" [(ngModel)]="surname" class="form-control"/>
-
-                <label for="name">Имя</label>
-                <input type="text" id="name" [(ngModel)]="name" class="form-control"/>
+                <label for="surname">ФИО</label>                
+                <input type="text" [(ngModel)]="userName" class="form-control"/>
 
                 <label for="passportNumber"> № проездного документа</label>                
-                <input type="text" id="ngModel" class="form-control"/>
+                <input type="text" [(ngModel)]="docId" class="form-control"/>
 
                 <label>Ваш вагон: <label *ngIf="!val">не выбран</label>{{val}}</label>
                 <label>К оплате: <label *ngIf="!val">не выбран вагон</label>{{price}} <label *ngIf="val">руб</label></label>
@@ -87,8 +84,8 @@ export class BookCarriageComponent {
     carriage: Carriage[] = [];
     fromId: number;
     toId: number;
-    surname: string;
-    name: string
+    userName: string;
+    docId: string;    
     private sub: Subscription;
 
     displayError: boolean = false;
@@ -104,7 +101,7 @@ export class BookCarriageComponent {
         this.carriageId = item.id;
     }
     buy() {
-        this.httpService.bookCarriage(this.tripId, this.fromId, this.toId, this.carriageId)
+        this.httpService.bookCarriage(this.tripId, this.fromId, this.toId, this.carriageId, this.userName, this.docId)
             .then((data) => console.log(data));        
     }
     ngOnInit() {

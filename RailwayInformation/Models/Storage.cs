@@ -62,13 +62,15 @@ namespace RailwayInformation.Models
                     number = item.number,
                     carriageType = item.carriageType.name,
                     emptySeats = item.emptySeats,
-                    price = Math.Floor(item.carriageType.priceFactor * tripDistance * 100) / 100
+                    price = Math.Round(item.carriageType.priceFactor * tripDistance, 2)
                 });
             }
             return rez;
         }
-        public static Ticket bookCarriage(int tripId, int fromId, int toId, int carriageId)
+        public static Ticket bookCarriage(int tripId, int fromId, int toId, int carriageId, string userName, string docId)
         {
+            if (userName.Length < 1 || docId.Length < 1)
+                return null;
             var trip = DB._db.Trips.Include("Carriages").Include("CarriageInformation").FirstOrDefault(x => x.id == tripId);
             if (trip == null)
                 return null;
@@ -93,29 +95,24 @@ namespace RailwayInformation.Models
             
             var stationFrom = DB._db.Points.Include("station").FirstOrDefault(x => x.id == from.id).station;
             var stationTo = DB._db.Points.Include("station").FirstOrDefault(x => x.id == to.id).station;
-                        
+
+            var price = Math.Round((to.tripDistance - from.tripDistance) * carriage.carriageType.priceFactor, 2);
+
             var ticket = new Ticket()
-            {     
-                userName = "Я",
+            {
+                userName = userName,
+                docId = docId,
+                price = price,
                 tripDirection = String.Format("{0},{1}", arrivalTimeFrom.route.name, arrivalTimeFrom.route.direction),
                 carriage = carriage.number,
-                from = new RoutePointUi()
-                {
-                    tripDistance = from.tripDistance,
-                    stayTime = from.stayTime,
-                    station = from.station,
-                    arrive = arrivalTimeFrom.arriveTime
-                },
-                to = new RoutePointUi()
-                {
-                    tripDistance = to.tripDistance,
-                    stayTime = to.stayTime,
-                    station = to.station,
-                    arrive = arrivalTimeTo.arriveTime
-                },
+                fromStation = from.station,
+                fromDepart = arrivalTimeFrom.arriveTime.AddMinutes(from.stayTime),
+                toStation = to.station,
+                toArrive = arrivalTimeTo.arriveTime,
+                //TODO Added userId
                 userOwner = 1
             };
-            //DB._db.Tickets.Add(ticket);
+            DB._db.Tickets.Add(ticket);
             return ticket;
         }
         private static TripUI createTripUI(ArrivalTime from, ArrivalTime to)

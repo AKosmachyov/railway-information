@@ -11,10 +11,14 @@ namespace RailwayInformation.Models
         [Key]
         public int id { get; set; }
         public string userName { get; set; }
+        public string docId { get; set; }
         public string tripDirection { get; set; }
         public int carriage { get; set; }
-        public RoutePointUi from { get; set; }
-        public RoutePointUi to { get; set; }
+        public Station fromStation { get; set; }
+        public DateTime fromDepart { get; set; }
+        public Station toStation { get; set; }
+        public DateTime toArrive { get; set; }
         public int userOwner { get; set; }
+        public double price { get; set; }
     }
 }

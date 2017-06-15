@@ -27,15 +27,17 @@ namespace RailwayInformation.Controllers
                 int from = Convert.ToInt32(data.fromId.Value);
                 int to = Convert.ToInt32(data.toId.Value);
                 int carriageId = Convert.ToInt32(data.carriageId.Value);
-           
-                var ticket = Storage.bookCarriage(tripId, from, to, carriageId);
+                string userName = data.userName.Value;
+                string docId = data.docId.Value;
+
+                var ticket = Storage.bookCarriage(tripId, from, to, carriageId, userName, docId);
                 if (ticket == null)
                     return NotFound();
                 return Ok(ticket);
             }
             catch (Exception)
             {
-                return BadRequest();
+                return BadRequest("Not all fields are filled out");
             }
         }
     }
