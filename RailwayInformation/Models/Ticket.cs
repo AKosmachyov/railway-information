@@ -18,7 +18,7 @@ namespace RailwayInformation.Models
         public DateTime fromDepart { get; set; }
         public Station toStation { get; set; }
         public DateTime toArrive { get; set; }
-        public int userOwner { get; set; }
+        public string userOwner { get; set; }
         public double price { get; set; }
     }
 }

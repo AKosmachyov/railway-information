@@ -1,26 +1,34 @@
-﻿import { Component } from '@angular/core';
+﻿import { Component, DoCheck } from '@angular/core';
 import { Router } from '@angular/router';
 
+import { User } from '../models/User';
 import { Trip } from '../models/trip';
-import { HttpService } from '../service/http.service';
+
+import { AuthService } from '../service/auth.service';
 
 @Component({
-        selector: 'my-app',
-        template: `
+    selector: 'my-app',
+    template: `
             <div class="top">
                 <div class="header">
                     <div class="col-md-offset-2 col-md-8">
                         <a [routerLink]="['/']">Информаторий ЖД</a>
                     </div>
                 <div class="col-xs-2 navbar-right-panel">
-                    <a class="btn btn-default" [routerLink]="['/login']">Вход</a>                     
+                    <div *ngIf = "!user">
+                        <a class="btn btn-default" [routerLink]="['/login']">Вход</a>
+                        <a class="btn btn-default" [routerLink]="['/checkin']">Регистрация</a>
+                    </div>
+                    <div *ngIf = "!!user">
+                        <span>{{user.email}}</span>
+                    </div>
                 </div>
             </div>
         </div>       
         <div class="main-part">
             <router-outlet></router-outlet>           
         </div>`,
-        styles: [` 
+    styles: [` 
             .top {
                height: 60px;
                position: fixed;
@@ -56,4 +64,12 @@ import { HttpService } from '../service/http.service';
             }
         `]
 })
-export class AppComponent { }
+export class AppComponent implements DoCheck {
+    private user: User;
+    constructor(private authService: AuthService) {
+        this.user = authService.currentUser;
+    }
+    ngDoCheck() {
+        this.user = this.authService.currentUser;
+    }
+}

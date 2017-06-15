@@ -67,7 +67,7 @@ namespace RailwayInformation.Models
             }
             return rez;
         }
-        public static Ticket bookCarriage(int tripId, int fromId, int toId, int carriageId, string userName, string docId)
+        public static Ticket bookCarriage(int tripId, int fromId, int toId, int carriageId, string userName, string docId, string userId)
         {
             if (userName.Length < 1 || docId.Length < 1)
                 return null;
@@ -109,8 +109,7 @@ namespace RailwayInformation.Models
                 fromDepart = arrivalTimeFrom.arriveTime.AddMinutes(from.stayTime),
                 toStation = to.station,
                 toArrive = arrivalTimeTo.arriveTime,
-                //TODO Added userId
-                userOwner = 1
+                userOwner = userId
             };
             DB._db.Tickets.Add(ticket);
             return ticket;

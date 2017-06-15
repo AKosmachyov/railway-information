@@ -5,6 +5,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using Microsoft.AspNet.Identity;
 
 namespace RailwayInformation.Controllers
 {
@@ -18,7 +19,7 @@ namespace RailwayInformation.Controllers
                 return BadRequest();
             return Ok(carriages);
         }
-        // book cariage
+        [Authorize]
         public IHttpActionResult Post([FromBody]dynamic data)
         {
             try
@@ -29,8 +30,9 @@ namespace RailwayInformation.Controllers
                 int carriageId = Convert.ToInt32(data.carriageId.Value);
                 string userName = data.userName.Value;
                 string docId = data.docId.Value;
+                string userId = User.Identity.GetUserId();
 
-                var ticket = Storage.bookCarriage(tripId, from, to, carriageId, userName, docId);
+                var ticket = Storage.bookCarriage(tripId, from, to, carriageId, userName, docId , userId);
                 if (ticket == null)
                     return NotFound();
                 return Ok(ticket);

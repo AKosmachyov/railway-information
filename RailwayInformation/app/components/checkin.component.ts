@@ -13,8 +13,8 @@ import { AuthService } from '../service/auth.service';
                 <h2>Регистрация</h2>
                 <hr/>
                 <form class="form-horizontal panel-body" #userForm="ngForm" (ngSubmit)="onSubmit()">
-                    <div *ngIf="dislpayError" class="alert alert-danger" role="alert">
-                        <button type="button" class="close" aria-label="Close" (click)="dislpayError = false">
+                    <div *ngIf="isError" class="alert alert-danger" role="alert">
+                        <button type="button" class="close" aria-label="Close" (click)="isError = false">
                             <span aria-hidden="true">&times;</span>
                         </button>
                         {{errorStr}}
@@ -24,7 +24,7 @@ import { AuthService } from '../service/auth.service';
                            
                     <div class="password-block">
                          <input class="form-control" placeholder="Пароль" required
-                           name="password" minlength="8" maxlength="24" #password="ngModel"
+                           name="password" minlength="6" maxlength="24" #password="ngModel"
                            [(ngModel)]="user.password" [(type)]="passwordInputType">
                         <i *ngIf="user.password" (mousedown)="showPassword(true)" (mouseup)="showPassword(false)"
                             class="glyphicon glyphicon-eye-open">
@@ -32,7 +32,7 @@ import { AuthService } from '../service/auth.service';
                     </div>
                     <div *ngIf="password.errors && (password.dirty || password.touched)" class="alert alert-danger">
                         <div [hidden]="!(password.errors.minlength || password.errors.required)">
-                            Пароль должен состоят минимум из 8 символов
+                            Пароль должен состоят минимум из 6 символов
                         </div>
                         <div [hidden]="!password.errors.maxlength">
                             Пароль должен быть меньше 24 символов
@@ -52,7 +52,7 @@ import { AuthService } from '../service/auth.service';
 export class CheckinComponent {
     user: User = new User();
 
-    dislpayError: boolean;
+    isError: boolean;
     errorStr: string;
 
     passwordInputType: string = 'password';
@@ -62,7 +62,23 @@ export class CheckinComponent {
         private router: Router
     ) {};
     onSubmit(): void {
-        
+        this.isWaitReq = true;
+        this.authService.checkin(this.user)
+            .then(status => this.authService.login(this.user.email, this.user.password))
+            .then(status => {
+                this.router.navigate(['/'])
+                this.isWaitReq = false;
+            })
+            .catch(err => {
+                if (!err.status)
+                    this.errorStr = 'Отсутствует подключение к сети Интернет';
+                if (err.status == 400)
+                    this.errorStr = 'Неверный логин или пароль';
+                if (!this.errorStr)
+                    this.errorStr = "На сервере произошел сбой";
+                this.isError = true;
+                this.isWaitReq = false;
+            })
     }
     showPassword(flag: boolean){
         this.passwordInputType = flag ? "text" : "password";
