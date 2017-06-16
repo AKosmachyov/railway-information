@@ -40,6 +40,7 @@ import { AuthService } from '../service/auth.service';
                position: fixed;
                 width: 100%;
                 border-bottom: 1px solid #d5dddf;
+                z-index: 2;
             }
             .header {
                 display: flex;

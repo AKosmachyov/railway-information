@@ -31,7 +31,7 @@ export class HttpService{
             .then(this.extractData)
             .catch(this.handleError);
     }
-    bookCarriage(tripId: number, from: number, to: number, carriageId: number, userName: string, docId: string): Promise<[Carriage]> {
+    bookCarriage(tripId: number, from: number, to: number, carriageId: number, userName: string, docId: string): Promise<Ticket> {
         let obj = {
             tripId: tripId,
             fromId: from,

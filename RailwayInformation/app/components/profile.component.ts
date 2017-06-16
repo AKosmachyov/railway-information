@@ -1,6 +1,7 @@
 ﻿import { Component, OnInit } from '@angular/core';
 
 import { HttpService } from '../service/http.service';
+import { AuthService } from '../service/auth.service';
 
 import { Ticket } from '../models/ticket';
 
@@ -24,8 +25,8 @@ import { Ticket } from '../models/ticket';
                 </table>
             </div>
             <img *ngIf="isWaiting" src="/public/images/spinner.gif">
-            <div *ngIf="arr.length == 0 && !isWaiting" class="alert alert-info" role="alert">У вас нет купленных билетов</div>
-            <div *ngIf="dispalayError" class="alert alert-warning" role="alert">Произошла ошибка</div>
+            <div *ngIf="arr.length == 0 && !isWaiting && !dispalayError" class="alert alert-info" role="alert">У вас нет купленных билетов</div>
+            <div *ngIf="dispalayError" class="alert alert-warning" role="alert">{{errorMessage}}</div>
         `,
     styles: [`
             ul {
@@ -55,10 +56,19 @@ export class ProfileComponent implements OnInit {
     arr: Ticket[] = [];
     isWaiting: boolean = false;
     dispalayError: boolean = false;
-    constructor(private httpService: HttpService) { };
+    errorMessage: string = "Произошла ошибка";
+    constructor(
+        private httpService: HttpService,
+        private authService: AuthService
+    ) { };
 
     ngOnInit() {
         this.isWaiting = true;
+        if (!this.authService.currentUser) {
+            this.dispalayError = true;
+            this.errorMessage = "Вы не авторизованы";
+            return;
+        }
         this.httpService.getTickets()
             .then(arr => {
                 this.isWaiting = false;

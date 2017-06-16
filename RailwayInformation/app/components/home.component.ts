@@ -7,7 +7,7 @@ import { HttpService } from '../service/http.service';
 @Component({
     selector: 'home',
     template: `
-            <div class="col-md-offset-2 col-md-8">
+            <div class="col-md-offset-2 col-md-8 col-xs-12">
                 <h1>Поиск</h1>
                 <div>Откуда
                         <input type="text" id="from" [(ngModel)]="from">

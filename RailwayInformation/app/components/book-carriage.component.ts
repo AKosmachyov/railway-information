@@ -4,6 +4,9 @@ import { Subscription } from 'rxjs/Subscription';
 
 import { HttpService } from '../service/http.service';
 import { Carriage } from '../models/carriage';
+import { Ticket } from '../models/ticket';
+
+import { AuthService } from '../service/auth.service';
 
 @Component({
     selector: 'book-carriage',
@@ -31,16 +34,22 @@ import { Carriage } from '../models/carriage';
                     </tbody>
                 </table>
             </div>
-            <div class = "userInformation">
+            <div *ngIf="displayUserBox" class = "userInformation">
                 <label for="surname">ФИО</label>                
-                <input type="text" [(ngModel)]="userName" class="form-control"/>
+                <input type="text" [(ngModel)]="userName" class="form-control" required/>
 
                 <label for="passportNumber"> № проездного документа</label>                
-                <input type="text" [(ngModel)]="docId" class="form-control"/>
+                <input type="text" [(ngModel)]="docId" class="form-control" required/>
 
                 <label>Ваш вагон: <label *ngIf="!val">не выбран</label>{{val}}</label>
                 <label>К оплате: <label *ngIf="!val">не выбран вагон</label>{{price}} <label *ngIf="val">руб</label></label>
-                <a (click)="buy()" class = "btn btn-default">Оплатить</a>
+                <button (click)="buy()" [disabled]="docId.length==0 || userName.length==0" class = "btn btn-default">Оплатить</button>
+            </div>
+            <div *ngIf="!displayUserBox">
+                <div class="alert alert-warning" role="alert">Вы должны авторизироваться
+                    <a target="_blank" href="/#/login">Войти</a>
+                    <a target="_blank" href="/#/checkin">Регистрация</a>
+                </div>
             </div>
         </div>
         <img *ngIf="isWaiting" src="/public/images/spinner.gif">
@@ -57,12 +66,13 @@ import { Carriage } from '../models/carriage';
                 border-width: 1px;
                 border-radius: 4px 4px 0px 0px;
                 border-style: solid;
+                min-width: 365px;
             }
             table {
                 margin-bottom: 0px;
             }
             input {
-                width:400px;
+                width:365px;
             }
             span {
                 display:row;
@@ -74,6 +84,9 @@ import { Carriage } from '../models/carriage';
                 height: 100px;
                 text-align: center;
             }
+            .alert {
+                margin-top: 10px;
+            }
         `]
 })
 export class BookCarriageComponent {
@@ -84,17 +97,21 @@ export class BookCarriageComponent {
     carriage: Carriage[] = [];
     fromId: number;
     toId: number;
-    userName: string;
-    docId: string;    
+    userName: string = "";
+    docId: string = "";  
     private sub: Subscription;
 
     displayError: boolean = false;
     isWaiting: boolean = false;
+    displayUserBox: boolean = false;
     constructor(
         private activateRoute: ActivatedRoute,
         private httpService: HttpService,
-        private router: Router
-    ) { }
+        private router: Router,
+        private authService: AuthService
+    ) {
+        this.displayUserBox = !!this.authService.currentUser;
+    }
     setCarriage(item: Carriage) {
         this.val = item.number;
         this.price = item.price;
@@ -117,6 +134,8 @@ export class BookCarriageComponent {
                 this.httpService.getSeats(this.tripId, this.fromId, this.toId).then((arr) => {
                     this.carriage = arr;
                     this.isWaiting = false;
+                    if (arr.length > 0)
+                        this.setCarriage(arr[0]);
                 }, () => {
                     this.displayError = true;
                     this.isWaiting = false;

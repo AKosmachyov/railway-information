@@ -154,6 +154,7 @@
     <Content Include="app\systemjs.config.js" />
     <Content Include="public\images\spinner.gif" />
     <Content Include="App_Data\ticket.html" />
+    <Content Include="public\css\index.css" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>

@@ -73,7 +73,7 @@ export class CheckinComponent {
                 if (!err.status)
                     this.errorStr = 'Отсутствует подключение к сети Интернет';
                 if (err.status == 400)
-                    this.errorStr = 'Неверный логин или пароль';
+                    this.errorStr = 'Данный email уже зарегистрирован';
                 if (!this.errorStr)
                     this.errorStr = "На сервере произошел сбой";
                 this.isError = true;

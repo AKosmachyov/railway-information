@@ -178,6 +178,9 @@ namespace RailwayInformation.Models
             var tempStr = String.Format("{0} {1}—{2}", arr[0], arr[1], arr[2]);
             sb.Replace("{direction}", tempStr);
 
+            sb.Replace("{fio}", ticket.userName);
+            sb.Replace("{doc}", ticket.docId);
+
             tempStr = String.Format("{0} {1}", ticket.fromStation.name, ticket.fromDepart.ToString("g"));
             sb.Replace("{from}", tempStr);
             tempStr = String.Format("{0} {1}", ticket.toStation.name, ticket.toArrive.ToString("g"));

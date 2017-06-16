@@ -42,7 +42,8 @@ import { HttpService } from '../service/http.service';
                 border-color: #ddd;
                 border-width: 1px;
                 border-radius: 4px 4px 0 0;
-                border-style: solid;    
+                border-style: solid;
+                min-width: 580px;
             }
             span b {
                 padding-left: 15px;
