@@ -14,7 +14,7 @@ import { HttpService } from '../service/http.service';
                         Куда
                         <input type="text" id="to" [(ngModel)]="to">
                         Когда
-                        <input type="date" value="2017-05-01" min='2017-05-01' max='2017-05-31' [(ngModel)]="time">
+                        <input type="date" [(ngModel)]="time">
                         <button class="btn" (click)="get()">
                                 <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
                         </button>

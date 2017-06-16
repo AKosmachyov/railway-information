@@ -59,7 +59,7 @@ export class TripComponent implements OnInit {
         if (this.trip) {
             this.direction = this.trip.direction.split(',');
             this.from = this.trip.from;
-            this.fromDate = new Date(this.trip.from.arrive);
+            this.fromDate = new Date(+new Date(this.trip.from.arrive) + this.trip.to.stayTime * 60000);
             this.toDate = new Date(this.trip.to.arrive);
             this.to = this.trip.to;
             this.trainNumber = this.trip.trainNumber;
@@ -75,7 +75,7 @@ export class TripComponent implements OnInit {
         return arr;
     }
     calculateTripTime(): string {
-        let time = new Date(+this.toDate - +this.fromDate - this.from.stayTime * 60000);
-        return `${time.getHours()} ч ${time.getMinutes()} мин`;
+        let time = new Date(+this.toDate - +this.fromDate);
+        return `${time.getUTCHours()} ч ${time.getUTCMinutes()} мин`;
     }
 }

@@ -144,35 +144,35 @@ namespace RailwayInformation
                     trip = fTrip,
                     route = route1,
                     point = route1.points[0],
-                    arriveTime = new DateTime(2017,5,1,12,05,0)
+                    arriveTime = new DateTime(2017,7,1,12,05,0)
                 },
                 new ArrivalTime()
                 {
                     trip = fTrip,
                     route = route1,
                     point = route1.points[1],
-                    arriveTime = new DateTime(2017,5,1,16,20,0)
+                    arriveTime = new DateTime(2017,7,1,16,20,0)
                 },
                 new ArrivalTime()
                 {
                     trip = fTrip,
                     route = route1,
                     point = route1.points[2],
-                    arriveTime = new DateTime(2017,5,1,17,32,0)
+                    arriveTime = new DateTime(2017,7,1,17,32,0)
                 },
                 new ArrivalTime()
                 {
                     trip = fTrip,
                     route = route1,
                     point = route1.points[3],
-                    arriveTime = new DateTime(2017,5,1,23,24,0)
+                    arriveTime = new DateTime(2017,7,1,23,24,0)
                 },
                 new ArrivalTime()
                 {
                     trip = fTrip,
                     route = route1,
                     point = route1.points[4],
-                    arriveTime = new DateTime(2017,5,2,1,54,0)
+                    arriveTime = new DateTime(2017,7,2,1,54,0)
                 }
 
             };
@@ -206,21 +206,21 @@ namespace RailwayInformation
                     trip = sTrip,
                     route = route2,
                     point = route2.points[0],
-                    arriveTime = new DateTime(2017,5,1,13,30,0)
+                    arriveTime = new DateTime(2017,7,1,13,30,0)
                 },
                  new ArrivalTime()
                 {
                     trip = sTrip,
                     route = route2,
                     point = route2.points[1],
-                    arriveTime = new DateTime(2017,5,1,15,20,0)
+                    arriveTime = new DateTime(2017,7,1,15,20,0)
                 },
                   new ArrivalTime()
                 {
                     trip = sTrip,
                     route = route2,
                     point = route2.points[2],
-                    arriveTime = new DateTime(2017,5,1,17,10,0)
+                    arriveTime = new DateTime(2017,7,1,17,10,0)
                 }
             };
 
@@ -257,21 +257,21 @@ namespace RailwayInformation
                     trip = tTrip,
                     route = route2,
                     point = route2.points[0],
-                    arriveTime = new DateTime(2017,5,2,13,30,0)
+                    arriveTime = new DateTime(2017,7,2,13,30,0)
                 },
                 new ArrivalTime()
                 {
                     trip = tTrip,
                     route = route2,
                     point = route2.points[1],
-                    arriveTime = new DateTime(2017,5,2,15,20,0)
+                    arriveTime = new DateTime(2017,5,7,15,20,0)
                 },
                 new ArrivalTime()
                 {
                     trip = tTrip,
                     route = route2,
                     point = route2.points[2],
-                    arriveTime = new DateTime(2017,5,2,17,10,0)
+                    arriveTime = new DateTime(2017,7,2,17,10,0)
                 }
             };
             context.Trips.Add(fTrip);

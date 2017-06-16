@@ -23,7 +23,7 @@ namespace RailwayInformation.Models
                        arrival.arriveTime >= date && arrival.arriveTime < dateMax);
             //Остановки со станцией to
             var arrivalTimesTo = DB._db.ArrivalTimes.Include("Point").Include("Trip").Where(arrival =>
-              arrival.point.station.name == to && arrival.arriveTime >= date && arrival.arriveTime < dateMax);
+              arrival.point.station.name == to && arrival.arriveTime >= date);
 
             if (arrivalTimesFrom.Count() == 0 || arrivalTimesTo.Count() == 0)
             {

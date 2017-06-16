@@ -5,7 +5,9 @@ import { Ticket } from '../models/ticket';
 @Component({
     selector: '.ticket',
     template: `
-            <td> {{ticket.id}} </td>
+            <td>
+                {{ticket.id}}
+            </td>
             <td>
                 <span>{{trainNumber}}</span>
                 <span>{{fromDirection}}</span>

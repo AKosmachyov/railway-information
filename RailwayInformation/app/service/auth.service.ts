@@ -39,6 +39,7 @@ export class AuthService {
 
     logout (): void {
         this.currentUser = undefined;
+        this.deleteCredential();
     }
 
     getAuthorizationHeader() {
