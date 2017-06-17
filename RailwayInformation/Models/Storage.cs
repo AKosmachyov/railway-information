@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Security.Cryptography;
 using System.Text;
 using System.Web;
 using System.Web.Hosting;
@@ -103,23 +104,31 @@ namespace RailwayInformation.Models
 
             var price = Math.Round((to.tripDistance - from.tripDistance) * carriage.carriageType.priceFactor, 2);
 
-            var ticket = new Ticket()
+            using (MD5 md5Hash = MD5.Create())
             {
-                userName = userName,
-                docId = docId,
-                price = price,
-                tripDirection = String.Format("{0},{1}", arrivalTimeFrom.route.name, arrivalTimeFrom.route.direction),
-                carriage = carriage.number,
-                carriageType = carriage.carriageType.name,
-                fromStation = from.station,
-                fromDepart = arrivalTimeFrom.arriveTime.AddMinutes(from.stayTime),
-                toStation = to.station,
-                toArrive = arrivalTimeTo.arriveTime,
-                userOwner = userId
-            };
-            DB._db.Tickets.Add(ticket);
-            DB._db.SaveChanges();
-            return ticket;
+                byte[] data = md5Hash.ComputeHash(Encoding.UTF8.GetBytes(DateTime.Now + userName));
+                string hash = Convert.ToBase64String(data);
+
+                var ticket = new Ticket()
+                {
+                    userName = userName,
+                    docId = docId,
+                    price = price,
+                    tripDirection = String.Format("{0},{1}", arrivalTimeFrom.route.name, arrivalTimeFrom.route.direction),
+                    carriage = carriage.number,
+                    carriageType = carriage.carriageType.name,
+                    fromStation = from.station,
+                    fromDepart = arrivalTimeFrom.arriveTime.AddMinutes(from.stayTime),
+                    toStation = to.station,
+                    toArrive = arrivalTimeTo.arriveTime,
+                    userOwner = userId,
+                    uiId = hash
+                };
+
+                DB._db.Tickets.Add(ticket);
+                DB._db.SaveChanges();
+                return ticket;
+            }
         }
         public static IQueryable<Ticket> getTickets(string userId)
         {   
@@ -164,9 +173,9 @@ namespace RailwayInformation.Models
             };
             return tripUi;
         }
-        public static Byte[] getPdf (int id)
+        public static Byte[] getPdf (string id)
         {
-            var ticket = DB._db.Tickets.FirstOrDefault(x => x.id == id);
+            var ticket = DB._db.Tickets.FirstOrDefault(x => x.uiId == id);
             if (ticket == null)
                 return null;
             var str = HostingEnvironment.MapPath(@"~/App_Data/ticket.html");
@@ -198,6 +207,5 @@ namespace RailwayInformation.Models
             }
             return res;
         }
-
     }
 }

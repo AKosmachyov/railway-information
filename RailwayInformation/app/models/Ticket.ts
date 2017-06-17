@@ -12,4 +12,5 @@ export class Ticket {
     public toStation: Station;
     public DateTime: Date;
     public price: number;
+    public uiId: string;
 }

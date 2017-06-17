@@ -53,7 +53,7 @@ import { AuthService } from '../service/auth.service';
             </div>
         </div>
         <img *ngIf="isWaiting" src="/public/images/spinner.gif">
-        <div *ngIf="dispalayError" class="alert alert-warning" role="alert">Данный поезд не найден</div>
+        <div *ngIf="displayError" class="alert alert-warning" role="alert">{{errMessage}}</div>
         `,
     styles: [`
             .userInformation {
@@ -101,6 +101,7 @@ export class BookCarriageComponent {
     docId: string = "";  
     private sub: Subscription;
 
+    errMessage: string;
     displayError: boolean = false;
     isWaiting: boolean = false;
     displayUserBox: boolean = false;
@@ -119,7 +120,11 @@ export class BookCarriageComponent {
     }
     buy() {
         this.httpService.bookCarriage(this.tripId, this.fromId, this.toId, this.carriageId, this.userName, this.docId)
-            .then((data) => console.log(data));        
+            .then((data) => this.router.navigate(['/profile']))
+            .catch(() => {
+                this.errMessage = "Данное место не доступно";
+                this.displayError = true;
+            });
     }
     ngOnInit() {
         this.sub = this.activateRoute
@@ -137,6 +142,7 @@ export class BookCarriageComponent {
                     if (arr.length > 0)
                         this.setCarriage(arr[0]);
                 }, () => {
+                    this.errMessage = "Данный поезд не найден";
                     this.displayError = true;
                     this.isWaiting = false;
                 })

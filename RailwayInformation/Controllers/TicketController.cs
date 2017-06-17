@@ -20,7 +20,7 @@ namespace RailwayInformation.Controllers
             return Ok(Storage.getTickets(userId));
         }
         // GET: api/Ticket/5
-        public HttpResponseMessage Get(int id)
+        public HttpResponseMessage Get(string id)
         {
             var arr = Storage.getPdf(id);
             if (arr == null)

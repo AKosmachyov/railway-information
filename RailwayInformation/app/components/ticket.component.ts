@@ -6,7 +6,7 @@ import { Ticket } from '../models/ticket';
     selector: '.ticket',
     template: `
             <td>
-                {{ticket.id}}
+                <a target="_blank" [href]="href">{{ticket.id}}</a>
             </td>
             <td>
                 <span>{{trainNumber}}</span>
@@ -33,11 +33,12 @@ export class TicketComponent implements OnInit {
     trainNumber: string;
     toDirection: string;
     fromDirection: string;
-
+    href: string;
     ngOnInit() {
         let arr = this.ticket.tripDirection.split(',');
         this.trainNumber = arr[0];
         this.toDirection = arr[1];
         this.fromDirection = arr[2];
+        this.href = "api/ticket/" + this.ticket.uiId;
     }
 }

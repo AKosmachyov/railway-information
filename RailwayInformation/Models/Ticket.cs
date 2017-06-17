@@ -21,5 +21,6 @@ namespace RailwayInformation.Models
         public DateTime toArrive { get; set; }
         public string userOwner { get; set; }
         public double price { get; set; }
+        public string uiId { get; set; }
     }
 }

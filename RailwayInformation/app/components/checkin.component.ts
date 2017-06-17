@@ -20,6 +20,7 @@ import { AuthService } from '../service/auth.service';
                         {{errorStr}}
                     </div>
                     <input type="email" class="form-control" placeholder="Почтовый адрес" required
+                           pattern="[\\w\\d.-]+@[\\w\\d]+?\.[\\w]{2,3}"
                            email name="email" [(ngModel)]="user.email" autocomplete="off">
                            
                     <div class="password-block">
