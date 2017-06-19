@@ -1,7 +1,11 @@
 ﻿import { Component } from '@angular/core';
 import {Router} from '@angular/router';
 
+import { Observable } from 'rxjs/Observable';
+import 'rxjs/add/observable/of';
+
 import { Trip } from '../models/trip';
+import { Station } from '../models/station';
 import { HttpService } from '../service/http.service';
 
 @Component({
@@ -10,14 +14,18 @@ import { HttpService } from '../service/http.service';
             <div class="col-md-offset-2 col-md-8 col-xs-12">
                 <h1>Поиск</h1>
                 <div>Откуда
-                        <input type="text" id="from" [(ngModel)]="from">
-                        Куда
-                        <input type="text" id="to" [(ngModel)]="to">
-                        Когда
-                        <input type="date" [(ngModel)]="time">
-                        <button class="btn" (click)="get()">
-                                <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
-                        </button>
+                    <input ngui-auto-complete [(ngModel)]="from" id="from"
+                            [source]="observableSource.bind(this)" 
+                            list-formatter="name" />
+                    Куда
+                    <input ngui-auto-complete [(ngModel)]="to" id="to"
+                            [source]="observableSource.bind(this)" 
+                            list-formatter="name" />
+                    Когда
+                    <input type="date" [(ngModel)]="time">
+                    <button class="btn" (click)="get()">
+                        <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+                    </button>
                 </div>
             </div>
     `,
@@ -51,7 +59,8 @@ export class HomeComponent {
     to: string;
     time: Date;
     constructor(
-        private router: Router
+        private router: Router,
+        private http: HttpService
     ) { };
     get() {
         if (!this.from || !this.to || !this.time)
@@ -64,5 +73,12 @@ export class HomeComponent {
 
             }
         })
-    } 
+    }
+    observableSource = (keyword: any): Observable<Station[]> => {
+        if (keyword) {
+            return this.http.getStationAutoComplete(keyword)
+        } else {
+            return Observable.of([]);
+        }
+    }
 }

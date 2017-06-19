@@ -16,6 +16,8 @@
             '@angular/forms': 'npm:@angular/forms/bundles/forms.umd.js',
             '@angular/upgrade': 'npm:@angular/upgrade/bundles/upgrade.umd.js',
           
+            '@ngui/auto-complete': 'npm:@ngui/auto-complete/dist/auto-complete.umd.js',
+
             'rxjs': 'npm:rxjs'
         },        
         packages: {

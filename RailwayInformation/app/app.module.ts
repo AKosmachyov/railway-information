@@ -13,6 +13,7 @@ import { CheckinComponent } from './components/checkin.component';
 import { LoginComponent } from './components/login.component';
 import { ProfileComponent } from './components/profile.component';
 import { TicketComponent } from './components/ticket.component';
+import { NguiAutoCompleteModule } from '@ngui/auto-complete';
 
 import { HttpService } from './service/http.service';
 import { AuthService } from './service/auth.service';
@@ -32,7 +33,8 @@ const appRoutes: Routes = [
         BrowserModule,
         FormsModule,
         HttpModule,
-        RouterModule.forRoot(appRoutes, { useHash: true })
+        RouterModule.forRoot(appRoutes, { useHash: true }),
+        NguiAutoCompleteModule
     ],
     declarations: [
         AppComponent,
