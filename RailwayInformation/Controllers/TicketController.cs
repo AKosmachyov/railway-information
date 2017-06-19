@@ -33,7 +33,7 @@ namespace RailwayInformation.Controllers
             {
                 FileName = "ticket.pdf"
             };
-            result.Content.Headers.ContentType = new MediaTypeHeaderValue("application/octet-stream");
+            result.Content.Headers.ContentType = new MediaTypeHeaderValue("application/pdf");
             return result;
         }
     }

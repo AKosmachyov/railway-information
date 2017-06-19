@@ -12,12 +12,12 @@ import { CarriageType } from "../models/CarriageType";
             {{direction[0]}} &#8212; {{direction[1]}}
         </td>
         <td>
-            {{fromDate + from.stayTime*60000 | date:"HH:mm"}}
+            {{fromDate + from.stayTime*60000 | date:"HH:mm dd.MM.yy"}}
             <p></p>
             {{from.station.name}}
         </td>
         <td>
-            {{toDate | date:"HH:mm"}}
+            {{toDate | date:"HH:mm dd.MM.yy"}}
             <p></p>
             {{to.station.name}}              
         </td>
@@ -42,6 +42,9 @@ import { CarriageType } from "../models/CarriageType";
                 list-style-type: none;
                 padding-left: 0; 
             }
+        td {
+            text-align: center;
+        }
     `]
 })
 export class TripComponent implements OnInit {

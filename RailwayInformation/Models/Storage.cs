@@ -106,8 +106,8 @@ namespace RailwayInformation.Models
 
             using (MD5 md5Hash = MD5.Create())
             {
-                byte[] data = md5Hash.ComputeHash(Encoding.UTF8.GetBytes(DateTime.Now + userName));
-                string hash = Convert.ToBase64String(data);
+                //TODO check is it unique id
+                var uiId = Guid.NewGuid().ToString("N");
 
                 var ticket = new Ticket()
                 {
@@ -122,7 +122,7 @@ namespace RailwayInformation.Models
                     toStation = to.station,
                     toArrive = arrivalTimeTo.arriveTime,
                     userOwner = userId,
-                    uiId = hash
+                    uiId = uiId
                 };
 
                 DB._db.Tickets.Add(ticket);
@@ -132,7 +132,7 @@ namespace RailwayInformation.Models
         }
         public static IQueryable<Ticket> getTickets(string userId)
         {   
-            return DB._db.Tickets.Where(x => x.userOwner == userId);
+            return DB._db.Tickets.Include("toStation").Include("fromStation").Where(x => x.userOwner == userId);
         }
         private static TripUI createTripUI(ArrivalTime from, ArrivalTime to)
         {
@@ -175,7 +175,7 @@ namespace RailwayInformation.Models
         }
         public static Byte[] getPdf (string id)
         {
-            var ticket = DB._db.Tickets.FirstOrDefault(x => x.uiId == id);
+            var ticket = DB._db.Tickets.Include("toStation").Include("fromStation").FirstOrDefault(x => x.uiId == id);
             if (ticket == null)
                 return null;
             var str = HostingEnvironment.MapPath(@"~/App_Data/ticket.html");

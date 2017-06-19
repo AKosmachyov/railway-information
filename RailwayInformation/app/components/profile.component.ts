@@ -7,7 +7,8 @@ import { Ticket } from '../models/ticket';
 
 @Component({
     selector: 'profile',
-    template: `           
+    template: `
+            <span><b>Личный кабинет</b></span>          
             <div *ngIf="arr.length > 0" class="search-field">
                 <table class="table table-hover">
                     <thead>
@@ -29,13 +30,12 @@ import { Ticket } from '../models/ticket';
             <div *ngIf="dispalayError" class="alert alert-warning" role="alert">{{errorMessage}}</div>
         `,
     styles: [`
-            ul {
-                list-style-type: none;
-                padding-left: 0; 
-            }
             .table {    
                 margin-bottom: 0px;
-            }            
+            }
+            th {
+                text-align: center;
+            }        
             .search-field {
                 min-width: 465px;
                 border-color: #ddd;
@@ -49,7 +49,7 @@ import { Ticket } from '../models/ticket';
                 left: 50%;
                 height: 100px;
                 text-align: center;
-            }   
+            }
         `]
 })
 export class ProfileComponent implements OnInit {

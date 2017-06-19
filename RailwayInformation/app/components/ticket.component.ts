@@ -15,18 +15,27 @@ import { Ticket } from '../models/ticket';
                 <span>{{toDirection}}</span>
             </td>
             <td>
-                <ul>
-                    <li>{{ticket.fromDepart| date:"HH:mm dd/MM/yy"}}</li>
+                <ul class="list-unstyled">
+                    <li>{{ticket.fromDepart| date:"HH:mm dd.MM.yy"}}</li>
                     <li>{{ticket.fromStation.name}}</li>
                 </ul>                        
             </td>
             <td>
-                <ul>
-                    <li>{{ticket.toArrive | date:"HH:mm dd/MM/yy"}}</li>
+                <ul class="list-unstyled">
+                    <li>{{ticket.toArrive | date:"HH:mm dd.MM.yy"}}</li>
                     <li>{{ticket.toStation.name}}</li>
                 </ul>                        
             </td>
-            <td>{{ticket.carriage}} {{ticket.carriageType}}</td>`
+            <td>{{ticket.carriage}} {{ticket.carriageType}}</td>
+        `,
+    styles: [`
+        ul {
+            padding-left: 10px;
+        }
+        td {
+            text-align: center;
+        }
+    `]
 })
 export class TicketComponent implements OnInit {
     @Input() ticket: Ticket;

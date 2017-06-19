@@ -37,7 +37,10 @@ import { HttpService } from '../service/http.service';
             }
             .table {    
                 margin-bottom: 0px;
-            }            
+            }
+            th {
+                text-align: center;
+            }   
             .search-field {
                 border-color: #ddd;
                 border-width: 1px;
