@@ -7,8 +7,8 @@ namespace RailwayInformation.Models
 {
     public class CarriageType
     {
-        public string name;
-        public Int32 emptySeat;
-        public double priceFactor;            
+        public int id { get; set; }
+        public string name { get; set; }
+        public double priceFactor { get; set; }
     }
 }

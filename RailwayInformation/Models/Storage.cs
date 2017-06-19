@@ -1,141 +1,211 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Net;
+using System.Security.Cryptography;
+using System.Text;
 using System.Web;
+using System.Web.Hosting;
+using TheArtOfDev.HtmlRenderer.PdfSharp;
 
 namespace RailwayInformation.Models
 {
     public static class Storage
-    {
-        public static List<Station> stations = new List<Station> { };
-        public static List<TripTest> tripTests = new List<TripTest>
-        {            
-        };
-        public static List<Trip> trips = new List<Trip>
+    {            
+        public static List<TripUI> getTrip(string from, string to, DateTime date)
         {
-            new Trip()
+            var dateMax = date.AddDays(1);
+            var rez = new List<TripUI>();
+
+            //Остановки со станцией from
+            var arrivalTimesFrom = DB._db.ArrivalTimes.Include("Point").Include("Trip").Include("Route")
+                .Where(arrival => arrival.point.station.name == from &&
+                       arrival.arriveTime >= date && arrival.arriveTime < dateMax);
+            //Остановки со станцией to
+            var arrivalTimesTo = DB._db.ArrivalTimes.Include("Point").Include("Trip").Where(arrival =>
+              arrival.point.station.name == to && arrival.arriveTime >= date);
+
+            if (arrivalTimesFrom.Count() == 0 || arrivalTimesTo.Count() == 0)
             {
-                trainNumber = "003",
-                route = new List<RoutePoint>
-                {
-                    new RoutePoint(new Station(0,"Москва"), new DateTime(2017,5,1,12,05,0), 5, 0),
-                    new RoutePoint(new Station(1,"Орша"), new DateTime(2017,5,1,16,20,0), 5, 800),
-                    new RoutePoint(new Station(2,"Минск"), new DateTime(2017,5,1,17,32,0), 5, 1000),
-                    new RoutePoint(new Station(3,"Брест"), new DateTime(2017,5,1,23,24,0), 5, 1400),
-                    new RoutePoint(new Station(4,"Варшава"), new DateTime(2017,5,2,1,54,0), 5, 1800)
-                },
-                carriages = new List<Carriage>
-                {
-                    new Carriage("1",15,"СВ",0.065),
-                    new Carriage("2",20,"СВ",0.065),
-                    new Carriage("3",40,"Плацкарт",0.023),
-                    new Carriage("4",30,"Плацкарт",0.023),
-                },
-                carriageType = new List<CarriageType>
-                {
-                    new CarriageType() { name = "СВ", emptySeat = 35, priceFactor = 0.065},
-                    new CarriageType() { name = "Плацкарт", emptySeat = 70, priceFactor = 0.023 }
-                }
-            },
-            new Trip()
-            {
-                trainNumber = "009ЯЩ",
-                route = new List<RoutePoint>
-                {
-                    new RoutePoint(new Station(5,"Минск"), new DateTime(2017,5,1,13,30,0), 5, 0),
-                    new RoutePoint(new Station(6,"Жабинка"), new DateTime(2017,5,1,15,20,0), 5, 190),
-                    new RoutePoint(new Station(7,"Брест"), new DateTime(2017,5,1,17,10,0), 5, 400)
-                },
-                carriages = new List<Carriage>
-                {
-                    new Carriage("1",15,"Сидячие",0.023),
-                    new Carriage("2",20,"Сидячие",0.023),
-                    new Carriage("3",40,"Сидячие",0.023),
-                    new Carriage("4",30,"Сидячие",0.023),
-                },
-                carriageType = new List<CarriageType>
-                {
-                    new CarriageType() { name = "Сидячие", emptySeat = 105, priceFactor = 0.023}
-                }
-            },
-            new Trip()
-            {
-                trainNumber = "009ЯЩ",
-                route = new List<RoutePoint>
-                {
-                    new RoutePoint(new Station(8,"Минск"), new DateTime(2017,5,2,13,30,0), 5, 0),
-                    new RoutePoint(new Station(9,"Жабинка"), new DateTime(2017,5,2,15,20,0), 5, 190),
-                    new RoutePoint(new Station(10,"Брест"), new DateTime(2017,5,2,18,10,0), 5, 400)
-                },
-                carriages = new List<Carriage>
-                {
-                    new Carriage("1",15,"Сидячие",0.023),
-                    new Carriage("2",20,"Сидячие",0.023),
-                    new Carriage("3",40,"Сидячие",0.023),
-                    new Carriage("4",30,"Сидячие",0.023),
-                },
-                carriageType = new List<CarriageType>
-                {
-                    new CarriageType() { name = "Сидячие", emptySeat = 95, priceFactor = 0.023}
-                }
+                return rez;
             }
-        };
-        public static List<Station> getStation()
-        {
-            return stations;
-        }
-        public static List<TripTest> getTripTest()
-        {
-            return tripTests;
-        }
-        public static List<TripTest> getTrip(string from, string to, string time)
-        {
-            var date = DateTime.Parse(time);
-            var rez = new List<TripTest>();
-            var t = trips.FindAll((trip) =>
+            foreach (ArrivalTime itemFrom in arrivalTimesFrom)
             {
-                var fromIndex = trip.route.FindIndex((point) => {
-                    return point.station.name == from && point.arrive.DayOfYear == date.DayOfYear;
+                foreach (ArrivalTime itemTo in arrivalTimesTo)
+                {
+                    if (itemTo.trip.id == itemFrom.trip.id && itemTo.point.tripDistance > itemFrom.point.tripDistance)
+                    {
+                        rez.Add(createTripUI(itemFrom, itemTo));
+                    }
+                }
+            }      
+            return rez;
+        }
+        public static List<CarriageUI> getCarriage(int tripId, int from, int to)
+        {
+            var rez = new List<CarriageUI>();
+            var carriageType = DB._db.CarriageTypes.ToList();
+            var trip = DB._db.Trips.Include("carriages").FirstOrDefault(x => x.id == tripId);
+
+            if (trip == null)
+                return rez;
+
+            var fromPoint = DB._db.ArrivalTimes.Include("Point")
+                .FirstOrDefault(x => x.point.station.id == from && x.trip.id == trip.id).point;
+            var toPoint = DB._db.ArrivalTimes.Include("Point")
+                .FirstOrDefault(x => x.point.station.id == to && x.trip.id == trip.id).point;
+
+            if (fromPoint == null || toPoint == null)
+                return rez;
+                 
+            double tripDistance = toPoint.tripDistance - fromPoint.tripDistance;
+            foreach (var item in trip.carriages)
+            {
+                rez.Add(new CarriageUI()
+                { 
+                    id = item.id,
+                    number = item.number,
+                    carriageType = item.carriageType.name,
+                    emptySeats = item.emptySeats,
+                    price = Math.Round(item.carriageType.priceFactor * tripDistance, 2)
                 });
-                var toIndex = trip.route.FindIndex((point) => { return point.station.name == to; });
-                return fromIndex < toIndex && fromIndex > -1;
-            });
-            for (var i = 0; i < t.Count; i++)
-            {
-                var item = new TripTest(
-                    t[i].trainNumber,
-                    t[i].route[0].station.name,
-                    t[i].route[t[i].route.Count - 1].station.name,
-                    t[i].route.Find((station) => { return station.station.name == from; }),
-                    t[i].route.Find((station) => { return station.station.name == to; })
-                );
-                item.carriageType = t[i].carriageType;
-                rez.Add(item);
             }
             return rez;
         }
-        public static List<Carriage> getCarriage(string trainNumber, int from, int to)
+        public static Ticket bookCarriage(int tripId, int fromId, int toId, int carriageId, string userName, string docId, string userId)
         {
-            var trip = trips.Find((item) => { return item.trainNumber == trainNumber; });
+            if (userName.Length < 1 || docId.Length < 1)
+                return null;
+            var trip = DB._db.Trips.Include("Carriages").Include("CarriageInformation").FirstOrDefault(x => x.id == tripId);
+            if (trip == null)
+                return null;
+            var arrivalTimeFrom = DB._db.ArrivalTimes.Include("Point").Include("Route")
+                .FirstOrDefault(x => x.point.station.id == fromId && x.trip.id == tripId);
+            var arrivalTimeTo = DB._db.ArrivalTimes.Include("Point")
+                .FirstOrDefault(x => x.point.station.id == toId && x.trip.id == trip.id);
+
+            var from = arrivalTimeFrom.point;
+            var to = arrivalTimeTo.point;
+
+            Carriage carriage = trip.carriages.FirstOrDefault(x => x.id == carriageId);
+
+            if (to == null || from == null || from.tripDistance > to.tripDistance || carriage == null || carriage.emptySeats == 0)
+                return null;
+
+            carriage = DB._db.Carriages.Include("CarriageType").FirstOrDefault(x => x.id == carriageId);
+            carriage.emptySeats--;
+            CarriageInformation carrInfo = trip.carriageInformation.FirstOrDefault(x => x.carriageType != null && x.carriageType.id == carriage.carriageType.id);
+            carrInfo.emptySeats--;
+            DB._db.SaveChanges();            
             
-            var f = trip.route.Find((item) => { return item.station.Id == from; });
-            var s = trip.route.Find((item) => { return item.station.Id == to; });
-            var distance = s.tripDistance - f.tripDistance;
-            for(var i = 0; i < trip.carriages.Count; i++)
+            var stationFrom = DB._db.Points.Include("station").FirstOrDefault(x => x.id == from.id).station;
+            var stationTo = DB._db.Points.Include("station").FirstOrDefault(x => x.id == to.id).station;
+
+            var price = Math.Round((to.tripDistance - from.tripDistance) * carriage.carriageType.priceFactor, 2);
+
+            using (MD5 md5Hash = MD5.Create())
             {
-                trip.carriages[i].price = trip.carriages[i].priceFactor * distance;
+                //TODO check is it unique id
+                var uiId = Guid.NewGuid().ToString("N");
+
+                var ticket = new Ticket()
+                {
+                    userName = userName,
+                    docId = docId,
+                    price = price,
+                    tripDirection = String.Format("{0},{1}", arrivalTimeFrom.route.name, arrivalTimeFrom.route.direction),
+                    carriage = carriage.number,
+                    carriageType = carriage.carriageType.name,
+                    fromStation = from.station,
+                    fromDepart = arrivalTimeFrom.arriveTime.AddMinutes(from.stayTime),
+                    toStation = to.station,
+                    toArrive = arrivalTimeTo.arriveTime,
+                    userOwner = userId,
+                    uiId = uiId
+                };
+
+                DB._db.Tickets.Add(ticket);
+                DB._db.SaveChanges();
+                return ticket;
             }
-            return trip.carriages;
         }
-        public static Info getInfo(string trainNumber, int fromId, int toId, string carriageName)
-        {            
-            var trip = trips.Find((item) => { return item.trainNumber == trainNumber; });
-            var direction = trip.route[0].station.name + "," + trip.route[trip.route.Count-1].station.name;
-            var f = trip.route.Find((item) => { return item.station.Id == fromId; });
-            var s = trip.route.Find((item) => { return item.station.Id == toId; });
-            var carriage = trip.carriages.Find((item) => { return item.name == carriageName; });
-            var rez = new Info(direction, f, s, carriage.type);
-            return rez;
+        public static IQueryable<Ticket> getTickets(string userId)
+        {   
+            return DB._db.Tickets.Include("toStation").Include("fromStation").Where(x => x.userOwner == userId);
+        }
+        private static TripUI createTripUI(ArrivalTime from, ArrivalTime to)
+        {
+            var point = DB._db.Points.Include("Station").FirstOrDefault(x => x.id == from.point.id);
+            var start = new RoutePointUi()
+            {
+                tripDistance = point.tripDistance,
+                stayTime = point.stayTime,
+                station = point.station,
+                arrive = from.arriveTime
+            };
+
+            point = DB._db.Points.Include("Station").FirstOrDefault(x => x.id == to.point.id);
+            var finish = new RoutePointUi()
+            {
+                tripDistance = point.tripDistance,
+                stayTime = point.stayTime,
+                station = point.station,
+                arrive = to.arriveTime
+            };
+
+            var trip = DB._db.Trips.Include("CarriageInformation").FirstOrDefault(x => x.id == from.trip.id);
+            var route = DB._db.Routes.FirstOrDefault(x => x.id == from.route.id);
+            var tripUi = new TripUI(route.name, route.direction, start, finish, trip.id);
+
+            tripUi.carriageType = new List<CarriageTypeUi>();
+            foreach (CarriageInformation carrInform in trip.carriageInformation)
+            {
+                var el = DB._db.CarriageInformations.Include("CarriageType").FirstOrDefault(x => x.id == carrInform.id);
+                tripUi.carriageType.Add(
+                    new CarriageTypeUi()
+                    {
+                        name = el.carriageType.name,
+                        emptySeat = carrInform.emptySeats,
+                        priceFactor = el.carriageType.priceFactor
+                    }
+                );
+            };
+            return tripUi;
+        }
+        public static Byte[] getPdf (string id)
+        {
+            var ticket = DB._db.Tickets.Include("toStation").Include("fromStation").FirstOrDefault(x => x.uiId == id);
+            if (ticket == null)
+                return null;
+            var str = HostingEnvironment.MapPath(@"~/App_Data/ticket.html");
+
+            StringBuilder sb = new StringBuilder();
+            sb.Append(File.ReadAllText(str));
+            sb.Replace("{orderNumber}", ticket.id.ToString());
+            var arr = ticket.tripDirection.Split(',');
+            var tempStr = String.Format("{0} {1}—{2}", arr[0], arr[1], arr[2]);
+            sb.Replace("{direction}", tempStr);
+
+            sb.Replace("{fio}", ticket.userName);
+            sb.Replace("{doc}", ticket.docId);
+
+            tempStr = String.Format("{0} {1}", ticket.fromStation.name, ticket.fromDepart.ToString("g"));
+            sb.Replace("{from}", tempStr);
+            tempStr = String.Format("{0} {1}", ticket.toStation.name, ticket.toArrive.ToString("g"));
+            sb.Replace("{to}", tempStr);
+
+            tempStr = String.Format("{0} {1}", ticket.carriage, ticket.carriageType);
+            sb.Replace("{carriage}", tempStr);
+
+            Byte[] res = null;
+            using (MemoryStream ms = new MemoryStream())
+            {
+                var pdf = PdfGenerator.GeneratePdf(sb.ToString(), PdfSharp.PageSize.Letter);
+                pdf.Save(ms);
+                res = ms.ToArray();
+            }
+            return res;
         }
     }
 }

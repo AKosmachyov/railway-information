@@ -1,0 +1,31 @@
+﻿<!DOCTYPE html>
+<html>
+<body>
+    <style>
+        #main {
+            text-align: center;
+            font-size: 22px;
+        }
+        div {
+            margin-bottom: 15px;
+        }
+        #main div span {
+            text-decoration: underline;
+        }
+        #main > span {
+            margin-bottom: 15px;
+            display: block;
+        }
+    </style>    
+    <div id="main">
+        <span>БЛАНК ЭЛЕКТРОННОГО ПРОЕЗДНОГО ДОКУМЕНТА</span>
+        <div>Номер заказа: {orderNumber}</div>
+        <div>ФИО: {fio}</div>
+        <div>Номер проездного документа: {doc}</div>
+        <div>Направление: {direction}</div>
+        <div>Отправление: <span>{from}</span></div> 
+        <div>Прибытие: <span>{to}</span></div>         
+        <div>Вагон: <span>{carriage}</span> Место: узнавайте у проводника</div>
+    </div>
+</body>
+</html>

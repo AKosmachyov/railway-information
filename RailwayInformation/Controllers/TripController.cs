@@ -10,29 +10,17 @@ namespace RailwayInformation.Controllers
 {
     public class TripController : ApiController
     {
-        public List<TripTest> Get(string from, string to, string time)
+        public IHttpActionResult Get(string from, string to, string time)
         {
-            return Storage.getTrip(from, to, time);
-        }
+            DateTime timeDeparture;
+            if (from == null || to == null || from.Length == 0 || to.Length == 0 || !DateTime.TryParse(time, out timeDeparture))
+                return BadRequest();
 
-        // POST: api/Trip
-        public Info Post([FromBody]dynamic data)
-        {
-            string trainNumber = data.trainNumber.Value;
-            int from = Convert.ToInt16(data.from.Value);
-            int to = Convert.ToInt16(data.to.Value);
-            string carriageName = data.carriageName.Value;
-            return Storage.getInfo(trainNumber, from, to, carriageName);
-        }
-
-        // PUT: api/Trip/5
-        public void Put(int id, [FromBody]string value)
-        {
-        }
-
-        // DELETE: api/Trip/5
-        public void Delete(int id)
-        {
+            var trips = Storage.getTrip(from, to, timeDeparture);
+            
+            if (trips.Capacity == 0)            
+                return NotFound();
+            return Ok(trips);            
         }
     }
 }

@@ -7,11 +7,9 @@ namespace RailwayInformation.Models
 {
     public class Route
     {
-        public int Id { get; set; }
-        ICollection<RoutePoint> stations { get; set; }
-        public Route()
-        {
-
-        }
+        public int id { get; set; }
+        public string name { get; set; }
+        public string direction { get; set; }
+        public List<Point> points { get; set; }
     }
 }

@@ -1,0 +1,13 @@
+﻿@media (max-width: 768px) {
+      home div {
+          flex-direction: column;
+          align-items: inherit
+              !important;        
+      }
+      home div input {
+          margin-bottom: 10px;   
+      }
+      home .btn {
+          border: 1px solid #ccc;
+      }
+}

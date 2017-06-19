@@ -5,29 +5,42 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using Microsoft.AspNet.Identity;
 
 namespace RailwayInformation.Controllers
 {
     public class CarriageController : ApiController
     {
-        public List<Carriage> Get(string trainNumber, int from, int to)
-        {
-            return Storage.getCarriage(trainNumber, from, to);
-        }
+        public IHttpActionResult Get(int tripId, int from, int to)
+        { 
+            var carriages = Storage.getCarriage(tripId, from, to);
 
-        // POST: api/Carriage
-        public void Post([FromBody]string value)
-        {
+            if (carriages.Capacity == 0)
+                return BadRequest();
+            return Ok(carriages);
         }
-
-        // PUT: api/Carriage/5
-        public void Put(int id, [FromBody]string value)
+        [Authorize]
+        public IHttpActionResult Post([FromBody]dynamic data)
         {
-        }
+            try
+            {
+                int tripId = Convert.ToInt32(data.tripId.Value);
+                int from = Convert.ToInt32(data.fromId.Value);
+                int to = Convert.ToInt32(data.toId.Value);
+                int carriageId = Convert.ToInt32(data.carriageId.Value);
+                string userName = data.userName.Value;
+                string docId = data.docId.Value;
+                string userId = User.Identity.GetUserId();
 
-        // DELETE: api/Carriage/5
-        public void Delete(int id)
-        {
+                var ticket = Storage.bookCarriage(tripId, from, to, carriageId, userName, docId , userId);
+                if (ticket == null)
+                    return NotFound();
+                return Ok(ticket);
+            }
+            catch (Exception)
+            {
+                return BadRequest("Not all fields are filled out");
+            }
         }
     }
 }
