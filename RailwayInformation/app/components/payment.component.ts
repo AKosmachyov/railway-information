@@ -13,23 +13,23 @@ import { HttpService } from '../service/http.service';
                 <div class="card well">
                     <div class="form-group card-number">
                         <label>Номер карты</label>
-                        <input class="form-control" maxLength="16"/>
+                        <input class="form-control" [(ngModel)]="cardNumber" [ngClass]="{dirty: carNumberErr}" maxLength="16"/>
                     </div>
                     <div class="form-inline card-center">
                         <div class="form-group">
                             <label>Срок действия</label>
-                            <input class="form-control" placeholder="ММ" maxLength="2">
+                            <input class="form-control" placeholder="ММ" [(ngModel)]="month" [ngClass]="{dirty: monthErr}" maxLength="2">
                             <label>/</label>
-                            <input class="form-control" placeholder="ГГ" maxLength="2">
+                            <input class="form-control" placeholder="ГГ" [(ngModel)]="year" [ngClass]="{dirty: yearErr}" maxLength="2">
                         </div>
                         <div class="form-group cvv">
                             <label for="exampleInputEmail2">CVV</label>
-                            <input class="form-control" placeholder="000" maxLength="3">
+                            <input class="form-control" [(ngModel)]="cvv" placeholder="000" [ngClass]="{dirty: cvvErr}" maxLength="3">
                         </div>
                     </div>
                     <div class="form-group">
                         <label>Имя Фамилия держателя карты</label>
-                        <input class="form-control" />
+                        <input class="form-control" [(ngModel)]="fio" [ngClass]="{dirty: fioErr}"/>
                     </div>
                 </div>
                 <div>
@@ -79,11 +79,24 @@ import { HttpService } from '../service/http.service';
             justify-content: space-around;
             margin-top: 10px;
         }
+        .dirty {
+            border-color: #a94442;
+        }
     `]
 })
 export class PaymentComponent implements OnInit {
     price: number;
-    currentInputId: number;
+    cardNumber: string;
+    carNumberErr: boolean = false;
+    month: string;
+    monthErr: boolean = false;
+    cvv: string;
+    cvvErr: boolean = false;
+    year: string;
+    yearErr: boolean = false;
+    fio: string;
+    fioErr: boolean = false;
+
     displayError: boolean = false;
     constructor(
         private ticketService: TicketService,
@@ -99,25 +112,66 @@ export class PaymentComponent implements OnInit {
         }
         this.price = this.ticketService.currentTicket.price;
     }
-        //var inputs = $(':input').keypress(function (e) {
-        //    if (e.which == 13) {
-        //        e.preventDefault();
-        //        var nextInput = inputs.get(inputs.index(this) + 1);
-        //        if (nextInput) {
-        //            nextInput.focus();
-        //        }
-        //    }
-        //});
+    //var inputs = $(':input').keypress(function (e) {
+    //    if (e.which == 13) {
+    //        e.preventDefault();
+    //        var nextInput = inputs.get(inputs.index(this) + 1);
+    //        if (nextInput) {
+    //            nextInput.focus();
+    //        }
+    //    }
+    //});
 
     buy() {
+        if (!this.checkCard())
+            return;
         let ticket = this.ticketService.currentTicket;
         this.httpService.bookCarriage(ticket.tripId, ticket.fromId, ticket.toId,
-                ticket.carriageId, ticket.userName, ticket.docId)
+            ticket.carriageId, ticket.userName, ticket.docId)
             .then((data) => {
                 this.ticketService.deleteTicket();
                 this.router.navigate(['/profile']);
             })
             .catch(() => this.displayError = true);
+    }
+
+    private checkCard() {
+        let flag = true;
+        let cardNumber = parseInt(this.cardNumber);
+        let month = parseInt(this.month);
+        let year = parseInt(this.year);
+        let cvv = parseInt(this.cvv);
+        if (isNaN(cardNumber) || cardNumber.toString().length < 15) {
+            this.carNumberErr = true;
+            flag = false;
+        } else {
+            this.carNumberErr = false;
+        }
+        if (!this.fio || this.fio.length == 0) {
+            this.fioErr = true;
+            flag = false;
+        } else {
+            this.fioErr = false;
+        }
+        if (isNaN(month) || month < 1 || month > 12) {
+            this.monthErr = true;
+            flag = false;
+        } else {
+            this.monthErr = false;
+        }            
+        if (isNaN(year) || year < 16) {
+            this.yearErr = true;
+            flag = false;
+        } else {
+            this.yearErr = false;
+        }
+        if (isNaN(cvv) || cvv.toString().length < 2) {
+            this.cvvErr = true;
+            flag = false;
+        } else {
+            this.cvvErr = false;
+        }
+        return flag;
     }
 
     close() {
