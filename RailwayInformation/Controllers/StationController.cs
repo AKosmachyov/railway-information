@@ -12,7 +12,7 @@ namespace RailwayInformation.Controllers
     {
         public IHttpActionResult Get(string query)
         {
-            if (query.Length == 0)
+            if (query != null && query.Length == 0)
                 return BadRequest();
             return Ok(Storage.getStation(query));
         }

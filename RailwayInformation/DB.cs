@@ -27,7 +27,7 @@ namespace RailwayInformation
         public DbSet<Station> Stations { get; set; }
         public DbSet<Trip> Trips { get; set; }
     }
-    public class DBInitializer : DropCreateDatabaseAlways<DBContext>
+    public class DBInitializer : CreateDatabaseIfNotExists<DBContext>
     {
         protected override void Seed(DBContext context)
         {
