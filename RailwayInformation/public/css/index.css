@@ -5,7 +5,8 @@
               !important;        
       }
       home div input {
-          margin-bottom: 10px;   
+          margin-bottom: 10px;
+          width: 100%;
       }
       home .btn {
           border: 1px solid #ccc;

@@ -7,6 +7,7 @@ import { Carriage } from '../models/carriage';
 import { Ticket } from '../models/ticket';
 
 import { AuthService } from '../service/auth.service';
+import { TicketService } from '../service/ticket.service';
 
 @Component({
     selector: 'book-carriage',
@@ -109,7 +110,8 @@ export class BookCarriageComponent {
         private activateRoute: ActivatedRoute,
         private httpService: HttpService,
         private router: Router,
-        private authService: AuthService
+        private authService: AuthService,
+        private ticketService: TicketService
     ) {
         this.displayUserBox = !!this.authService.currentUser;
     }
@@ -119,12 +121,17 @@ export class BookCarriageComponent {
         this.carriageId = item.id;
     }
     buy() {
-        this.httpService.bookCarriage(this.tripId, this.fromId, this.toId, this.carriageId, this.userName, this.docId)
-            .then((data) => this.router.navigate(['/profile']))
-            .catch(() => {
-                this.errMessage = "Данное место не доступно";
-                this.displayError = true;
-            });
+        let ticket = {
+            tripId: this.tripId,
+            fromId: this.fromId,
+            toId: this.toId,
+            carriageId: this.carriageId,
+            userName: this.userName,
+            docId: this.docId,
+            price: this.price
+        }
+        this.ticketService.setTicket(ticket);
+        this.router.navigate(['/payment']);
     }
     ngOnInit() {
         this.sub = this.activateRoute

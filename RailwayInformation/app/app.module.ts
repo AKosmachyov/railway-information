@@ -13,9 +13,12 @@ import { CheckinComponent } from './components/checkin.component';
 import { LoginComponent } from './components/login.component';
 import { ProfileComponent } from './components/profile.component';
 import { TicketComponent } from './components/ticket.component';
+import { PaymentComponent } from './components/payment.component'
+import { NguiAutoCompleteModule } from '@ngui/auto-complete';
 
 import { HttpService } from './service/http.service';
 import { AuthService } from './service/auth.service';
+import { TicketService } from './service/ticket.service';
 
 const appRoutes: Routes = [
     { path: '', component: HomeComponent },
@@ -24,6 +27,7 @@ const appRoutes: Routes = [
     { path: 'checkin', component: CheckinComponent },
     { path: 'login', component: LoginComponent },
     { path: 'profile', component: ProfileComponent },
+    { path: 'payment', component: PaymentComponent },
     { path: '*', component: HomeComponent }   
 ];
 
@@ -32,7 +36,8 @@ const appRoutes: Routes = [
         BrowserModule,
         FormsModule,
         HttpModule,
-        RouterModule.forRoot(appRoutes, { useHash: true })
+        RouterModule.forRoot(appRoutes, { useHash: true }),
+        NguiAutoCompleteModule
     ],
     declarations: [
         AppComponent,
@@ -43,11 +48,13 @@ const appRoutes: Routes = [
         CheckinComponent,
         LoginComponent,
         ProfileComponent,
-        TicketComponent
+        TicketComponent,
+        PaymentComponent
     ],
     providers: [
         HttpService,
-        AuthService
+        AuthService,
+        TicketService
     ],
     bootstrap: [ AppComponent ]
 })

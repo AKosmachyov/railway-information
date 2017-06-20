@@ -165,6 +165,7 @@
     <Compile Include="AuthRepository.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\CarriageController.cs" />
+    <Compile Include="Controllers\StationController.cs" />
     <Compile Include="Controllers\TicketController.cs" />
     <Compile Include="Controllers\TripController.cs" />
     <Compile Include="DB.cs" />
@@ -213,6 +214,7 @@
     <TypeScriptCompile Include="app\components\checkin.component.ts" />
     <TypeScriptCompile Include="app\components\login.component.ts" />
     <TypeScriptCompile Include="app\components\home.component.ts" />
+    <TypeScriptCompile Include="app\components\payment.component.ts" />
     <TypeScriptCompile Include="app\components\profile.component.ts" />
     <TypeScriptCompile Include="app\components\ticket.component.ts" />
     <TypeScriptCompile Include="app\main.ts" />
@@ -228,6 +230,7 @@
     <TypeScriptCompile Include="app\components\search-result.component.ts" />
     <TypeScriptCompile Include="app\components\trip.component.ts" />
     <TypeScriptCompile Include="app\models\routepoint.ts" />
+    <TypeScriptCompile Include="app\service\ticket.service.ts" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

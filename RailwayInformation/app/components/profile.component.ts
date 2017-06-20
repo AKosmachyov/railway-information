@@ -50,6 +50,10 @@ import { Ticket } from '../models/ticket';
                 height: 100px;
                 text-align: center;
             }
+            span > b {
+                padding-left: 15px;
+                font-size: 23px;
+            }
         `]
 })
 export class ProfileComponent implements OnInit {

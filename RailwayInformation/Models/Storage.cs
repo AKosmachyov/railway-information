@@ -207,5 +207,9 @@ namespace RailwayInformation.Models
             }
             return res;
         }
+        public static IQueryable<Station> getStation (string id)
+        {
+            return DB._db.Stations.Where(x => x.name.Contains(id));
+        }
     }
 }

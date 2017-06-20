@@ -6,9 +6,11 @@ import { AuthService } from './auth.service';
 import { Trip } from '../models/trip';
 import { Carriage } from '../models/carriage';
 import { Ticket } from '../models/ticket';
+import { Station } from '../models/station';
 
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/toPromise';
+import { Observable } from 'rxjs/Observable';
 
 @Injectable()
 export class HttpService{
@@ -50,6 +52,13 @@ export class HttpService{
             .toPromise()
             .then(this.extractData)
             .catch(this.handleError);
+    }
+    getStationAutoComplete(str: string): Observable<Station[]> {
+        return this.http.get(`/api/station?query=${str}`, { headers: this.authService.getAuthorizationHeader() })
+            .map(res => {
+                let json = res.json();
+                return json;
+            })
     }
     private extractData(res: Response) {
         let body = res.json();
